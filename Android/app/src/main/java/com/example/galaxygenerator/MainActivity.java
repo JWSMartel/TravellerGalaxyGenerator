@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         private static final String TEMP = "\nTemperature: ";
 
-        private String Description = "\nPlanet Description: ";
+        private String Description = "\n\nPlanet Description: ";
         private String Name;
         private String Size;
         private String Gs;
@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         private String SurvivalGearReq;
         private int SizeRoll;
         private int AtmoRoll;
+        private int PopRoll;
+        private int GovRoll;
+        private int LawRoll;
         private String printOut;
 
         private Planetoid(){
@@ -91,9 +94,13 @@ public class MainActivity extends AppCompatActivity {
             createPlanetAtmo(this);
             createPlanetTemp(this);
             createPlanetHydro(this);
+            createPlanetPop(this);
+            createPlanetGov(this);
+            createPlanetLaw(this);
+            createPlanetTech(this);
             Log.d(TAG, Name);
-            printOut = NAME+Name+Description+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+Temp+
-                    HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+Law+TECHLV+Tech;
+            printOut = NAME+Name+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+
+                    Temp+HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+Law+TECHLV+Tech+Description;
         }
 
         private void createStarport(Planetoid planetoid){
@@ -384,8 +391,196 @@ public class MainActivity extends AppCompatActivity {
                     case 7:
                         planetoid.Hydro = "66-75%";
                         planetoid.Description += "Earthlike amount of water. ";
+                        break;
+                    case 8:
+                        planetoid.Hydro = "76-85%";
+                        planetoid.Description += "Water world. ";
+                        break;
+                    case 9:
+                        planetoid.Hydro = "86-95%";
+                        planetoid.Description += "Only a few small islands and archipelagos. ";
+                        break;
+                    default:
+                        Log.e(TAG, "Something went wrong in the Hydro Switch.");
+                        break;
                 }
             }
+        }
+
+        private void createPlanetPop(Planetoid planetoid){
+            Log.d(TAG, "createPlanetPop Called!");
+            planetoid.PopRoll = rollDie(0,10);
+            if(planetoid.PopRoll == 10){
+                planetoid.Name += "A";
+                Pop = "Tens of billions";
+                planetoid.Description += "Population of tens of billions. ";
+            }else{
+                planetoid.Name += planetoid.PopRoll;
+                switch (planetoid.PopRoll){
+                    case 0:
+                        Pop = "None";
+                        planetoid.Description += "Uninhabited. ";
+                        break;
+                    case 1:
+                        Pop = "Few";
+                        planetoid.Description += "Population consisting of a tiny farmstead" +
+                                " or a large family. ";
+                        break;
+                    case 2:
+                        Pop = "Hundreds";
+                        planetoid.Description += "Population consisting of a village. ";
+                        break;
+                    case 3:
+                        Pop = "Thousands";
+                        planetoid.Description += "Population of thousands. ";
+                        break;
+                    case 4:
+                        Pop = "Tens of thousands";
+                        planetoid.Description += "Population consisting of a small town. ";
+                        break;
+                    case 5:
+                        Pop = "Hundreds of thousands";
+                        planetoid.Description += "Population consisting of an average city. ";
+                        break;
+                    case 6:
+                        Pop = "Millions";
+                        planetoid.Description += "Population of millions. ";
+                        break;
+                    case 7:
+                        Pop = "Tens of millions";
+                        planetoid.Description += "Population consisting of a large city. ";
+                        break;
+                    case 8:
+                        Pop = "Hundreds of millions";
+                        planetoid.Description += "Population of hundreds of millions. ";
+                        break;
+                    case 9:
+                        Pop = "Billions";
+                        planetoid.Description += "Population similar to present day Earth. ";
+                        break;
+                    default:
+                        Log.e(TAG, "Something went wrong in planet pop generator.");
+                        break;
+                }
+            }
+        }
+
+        private void createPlanetGov(Planetoid planetoid){
+            Log.d(TAG, "createPlanetGov Called!");
+            planetoid.Description += "\n";
+            if(planetoid.PopRoll == 0){
+                planetoid.Govt = "None";
+                planetoid.Description += "No government structure. In many cases, family bonds" +
+                        "predominate. Examples include a Family, Clan, or total Anarchy. Little" +
+                        " could be considered illegal here. ";
+            }else{
+                GovRoll = rollDie(5,-5) + PopRoll;
+                if(GovRoll <= 0){
+                    planetoid.Govt = "None";
+                    planetoid.Description += "No government structure. In many cases, family bonds" +
+                            "predominate. Examples include a Family, Clan, or total Anarchy. Little" +
+                            " could be considered illegal here. ";
+                }else{
+                    switch (GovRoll){
+                        case 1:
+                            planetoid.Govt = "Company/Corporation";
+                            planetoid.Description += "Ruling functions are assumed by a company " +
+                                    "managerial elite, and most citizenry are company employees " +
+                                    "or dependants. Examples include a corporate outpust, asteroid " +
+                                    "mine, or a feudal domain. Likely would not appreciate weapons, " +
+                                    "drugs, or Travellers in their space. ";
+                            break;
+                        case 2:
+                            planetoid.Govt = "Participating Democracy";
+                            planetoid.Description += "Ruling functions are reached by the advise " +
+                                    "and consent of the citizenry directly. Examples include a " +
+                                    "collective, tribal council, or comm-linked consensus. Such " +
+                                    "civilizations tend to be weary of drugs. ";
+                            break;
+                        case 3:
+                            planetoid.Govt = "Self-perpetuating Oligarchy";
+                            planetoid.Description += "Ruling functions are preformed by a restricted" +
+                                    " minority, with little to no input from the mass of the " +
+                                    "citizenry. Exmaples include a plutocracy or a hereditary ruling" +
+                                    " caste. They do no tend to like weapons, technology, or Travellers. ";
+                            break;
+                        case 4:
+                            planetoid.Govt = "Represenative Democracy";
+                            planetoid.Description += "Ruling functions are preformed by elected " +
+                                    "representatives. Examples include a republic or democracy. " +
+                                    "Likely would not appreciate drugs, weapons, or psionics.";
+                            break;
+                        case 5:
+                            planetoid.Govt = "Feudal Techocracy";
+                            planetoid.Description += "Ruling functions are preformed by specific " +
+                                    "individuals for persons who agree to be ruled by them. " +
+                                    "Relationships are based on the performance of technical " +
+                                    "activities which are mutually beneficial.They do not tend to " +
+                                    "like outside weapons, technology, or computers. ";
+                            break;
+                        case 6:
+                            planetoid.Govt = "Captive Government";
+                            planetoid.Description += "Ruling functions are performed by an imposed " +
+                                    "leadership answerable to an outside group. Examples include a " +
+                                    "colony or conquered area. Contraband here may include weapons, " +
+                                    "technology, or Travellers. ";
+                            break;
+                        case 7:
+                            planetoid.Govt = "Balkanisation";
+                            planetoid.Description += "No central authority exists; rival governments" +
+                                    " complete for control. Law Level refers to the government " +
+                                    "nearest the starport. Examples include multiple governments " +
+                                    "involved in a civil war. They could have an aversion to anything. ";
+                            break;
+                        case 8:
+                            planetoid.Govt = "Civil Service Bureaucracy";
+                            planetoid.Description += "Ruling functions are performed by government " +
+                                    "agencies employing individuals selected for their expertise. " +
+                                    "Examples include a technocracy or communism. They likely look " +
+                                    "down on drugs and weapons. ";
+                            break;
+                        case 9:
+                            planetoid.Govt = "Impersonal Bureaucracy";
+                            planetoid.Description += "Ruling functions are performed by agencies " +
+                                    "which have become insulated from the governed citizens. Examples " +
+                                    "include entrenched castes of bureaucrats or a decaying empire. " +
+                                    "They do like technology, weapons, drugs, Travellers, or " +
+                                    "psionics typically. ";
+                            break;
+                        case 10:
+                            planetoid.Govt = "Charismatic Dictator";
+                            planetoid.Description += "Ruling functions are performed by agencies " +
+                                    "directed by a single leader who enjoys the overwhelming " +
+                                    "confidence of the citizens. Examples include a revolutionary " +
+                                    "leader, messiah, or emperor. Only the dictator can decide what " +
+                                    "is illegal here. ";
+                            break;
+                        default:
+                            Log.e(TAG, "Something went wrong with the government roll");
+                    }
+                }
+            }
+        }
+
+        private void createPlanetLaw(Planetoid planetoid){
+            Log.d(TAG, "createPlanetLaw Called!");
+            if(planetoid.PopRoll == 0){
+                planetoid.Law = "None";
+                planetoid.Description += "\n";
+            }else{
+
+            }
+        }
+
+        private void createPlanetTech(Planetoid planetoid){
+            Log.d(TAG, "createPlanetTech Called!");
+            if(planetoid.PopRoll == 0){
+                planetoid.Tech = "None";
+                planetoid.Description += "\n";
+            }else{
+
+            }
+
         }
     }
 }
