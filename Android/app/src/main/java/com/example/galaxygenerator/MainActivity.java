@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         private static final String HYPHEN = "-";
         private static final String TECHLV = "\nTech Level: ";
 
+        private static final String TEMP = "\nTemperature: ";
+
         private String Description = "\nPlanet Description: ";
         private String Name;
         private String Size;
@@ -87,8 +89,10 @@ public class MainActivity extends AppCompatActivity {
             createStarport(this);
             createPlanetSize(this);
             createPlanetAtmo(this);
+            createPlanetTemp(this);
+            createPlanetHydro(this);
             Log.d(TAG, Name);
-            printOut = NAME+Name+Description+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+
+            printOut = NAME+Name+Description+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+Temp+
                     HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+Law+TECHLV+Tech;
         }
 
@@ -175,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
         private void createPlanetAtmo(Planetoid planetoid){
             Log.d(TAG, "createPlanetAtmo Called!");
             planetoid.AtmoRoll = rollDie(5, -5) + planetoid.SizeRoll;
-            Log.d(TAG, "Atmo Roll: "+planetoid.AtmoRoll);
             if(planetoid.AtmoRoll < 1){
                 //No Atmo
                 planetoid.Name += "0";
@@ -284,5 +287,69 @@ public class MainActivity extends AppCompatActivity {
             }
 
     }
+
+        private void createPlanetTemp(Planetoid planetoid){
+            Log.d(TAG, "createPlanetTemp Called!");
+            dieRoll = rollDie(12,2);
+            Log.d(TAG, "Temp Die: "+dieRoll);
+            Log.d(TAG, "Atmo Roll: "+planetoid.AtmoRoll);
+            if(planetoid.AtmoRoll<2){
+                planetoid.Description += "Temperatures swing wildly from roasting during the day " +
+                        "to freezing at night.";
+            }else if(planetoid.AtmoRoll == 2||planetoid.AtmoRoll == 3){
+                dieRoll -= 2;
+            }else if(planetoid.AtmoRoll == 4||planetoid.AtmoRoll == 5 || planetoid.AtmoRoll == 14) {
+                dieRoll -= 1;
+            }else if(planetoid.AtmoRoll == 8||planetoid.AtmoRoll == 9){
+                dieRoll += 1;
+            }else if(planetoid.AtmoRoll == 10||planetoid.AtmoRoll == 13||planetoid.AtmoRoll == 15){
+                dieRoll += 2;
+            }else if(planetoid.AtmoRoll == 11||planetoid.AtmoRoll == 12){
+                dieRoll += 6;
+            }
+            Log.d(TAG, "Temp Prog: "+dieRoll);
+
+            if(dieRoll <3){
+                planetoid.Temp = "Frozen: >-51\u2103";
+                planetoid.Description += "Frozen world. No liquid water, very dry atmostphere. ";
+            }else if(dieRoll == 3||dieRoll == 4){
+                planetoid.Temp = "Cold: -51-0\u2103";
+                planetoid.Description += "Icy world. Little liquid water, extensive ice caps, few clouds. ";
+            }else if(dieRoll<10){
+                Log.d(TAG, "Planet Temperate");
+                planetoid.Temp = "Temperate: 0-90\u2103";
+                planetoid.Description += "Temperate world. Earthlike. Liquid and vaporised water are" +
+                        " common, moderate ice caps. ";
+            }else if(dieRoll == 10||dieRoll == 11){
+                planetoid.Temp = "Hot: 31-80\u2103";
+                planetoid.Description += "Hot world. Small or no ice caps, little liquid water." +
+                        " Most water in the form of clouds. ";
+            }else{
+                planetoid.Temp = "Roasting: 81\u2103+";
+                planetoid.Description += "Boiling world. No ice caps, little liquid water. ";
+            }
+            Log.d(TAG, "Planet Temp in Temp: "+planetoid.Temp);
+        }
+
+        private void createPlanetHydro(Planetoid planetoid){
+            Log.d(TAG, "createPlanetHydro Called!");
+            //2d6-7+Size
+            dieRoll = rollDie(5,-5) + planetoid.SizeRoll;
+            if(planetoid.SizeRoll<2){
+                planetoid.Hydro = "0";
+            }
+            if(planetoid.AtmoRoll == 0||planetoid.AtmoRoll == 1||(planetoid.AtmoRoll>9&&planetoid.AtmoRoll<13)){
+                dieRoll -=4;
+            }
+            if(planetoid.Temp.contains("Hot")){
+                dieRoll -= 2;
+            }else if(planetoid.Temp.contains("Roasting")){
+                dieRoll -= 6;
+            }
+
+            switch(dieRoll){
+                
+            }
+        }
     }
 }
