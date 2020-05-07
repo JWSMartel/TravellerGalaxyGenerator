@@ -347,8 +347,44 @@ public class MainActivity extends AppCompatActivity {
                 dieRoll -= 6;
             }
 
-            switch(dieRoll){
-                
+            if(dieRoll<1){
+                planetoid.Name += "0";
+                planetoid.Hydro = "0-5%";
+                planetoid.Description += "Desert world. ";
+            }else if(dieRoll>10){
+                planetoid.Name += "A";
+                planetoid.Hydro = "96-100%";
+                planetoid.Description += "Almost entirely water. ";
+            }else{
+                planetoid.Name += dieRoll;
+                switch (dieRoll){
+                    case 1:
+                        planetoid.Hydro = "6-15%";
+                        planetoid.Description += "Dry world. ";
+                        break;
+                    case 2:
+                        planetoid.Hydro = "16-25%";
+                        planetoid.Description += "A few small seas. ";
+                        break;
+                    case 3:
+                        planetoid.Hydro = "26-35%";
+                        planetoid.Description += "Small seas and oceans. ";
+                        break;
+                    case 4:
+                        planetoid.Hydro = "36-45%";
+                        planetoid.Description += "Wet world. ";
+                        break;
+                    case 5:
+                        planetoid.Hydro = "46-55%";
+                        planetoid.Description += "Large oceans. ";
+                        break;
+                    case 6:
+                        planetoid.Hydro = "56-65%";
+                        break;
+                    case 7:
+                        planetoid.Hydro = "66-75%";
+                        planetoid.Description += "Earthlike amount of water. ";
+                }
             }
         }
     }
