@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
     public int rollDie(int max, int min){
+        if(min>=max){
+            return 10000;
+        }
         return (int) (Math.random()*((max-min)+1))+min;
     }
 
@@ -577,7 +580,9 @@ public class MainActivity extends AppCompatActivity {
                                     "not want in their sectors. ";
                             break;
                     }
+                    rollCulture(planetoid);
 
+                    //Decide number of factions
                     int factionRoll = rollDie(3,1);
                     if(planetoid.GovRoll == 0||planetoid.GovRoll == 7){
                          factionRoll += 1;
@@ -585,6 +590,7 @@ public class MainActivity extends AppCompatActivity {
                         factionRoll -= 1;
                     }
 
+                    //Make a faction for each
                     if(factionRoll > 0){
                         planetoid.Description += "\n\nThere are "+factionRoll+" other factions on the " +
                                 "planet as well. ";
@@ -716,13 +722,139 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        private void rollCulture(Planetoid planetoid){
+            planetoid.Description += "\n\n";
+            int tensDie = rollDie(6,1);
+            dieRoll = rollDie(6,1);
+            switch (tensDie){
+                case 1:
+                    switch(dieRoll){
+                        case 1:
+                            planetoid.Description += "Sexist - one gender is considered subservient or inferior to the other. ";
+                            break;
+                        case 2:
+                            planetoid.Description += "Religious - culture is heavily influenced by a religion or belief system, possibly one unique to this world. ";
+                            break;
+                        case 3:
+                            planetoid.Description += "Artistic - art and culture are highly prized. Aesthetic design is important in all artifacts produced onworld. ";
+                            break;
+                        case 4:
+                            planetoid.Description += "Ritualised - social interaction and trade is highly formalised. Politeness and adherence to traditional forms is considered very important. ";
+                            break;
+                        case 5:
+                            planetoid.Description += "Conservative - the culture resists change and outside influences. ";
+                            break;
+                        case 6:
+                            planetoid.Description += "Xenophobic - the culture distrusts outsiders and alien influences. Offworlders will face considerable prejudice. ";
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch(dieRoll){
+                        case 1:
+                            planetoid.Description += "Taboo - a particular topic is forbidden and " +
+                                    "cannot be discussed. Characters who unwittingly mention this " +
+                                    "topic  will be ostracised. ";
+                            break;
+                        case 2:
+                            planetoid.Description += "Deceptive - trickery and equivocation are " +
+                                    "considered acceptable. Honesty is a sign of weakness. ";
+                            break;
+                        case 3:
+                            planetoid.Description += "Liberal - the culture welcomes change and " +
+                                    "offworld influence. Characters who bring new and strange ideas " +
+                                    "will be welcomed. ";
+                            break;
+                        case 4:
+                            planetoid.Description += "Honourable - one's word is one's bond in the " +
+                                    "culture. Lying is both rare and despised. ";
+                            break;
+                        case 5:
+                            planetoid.Description += "Influenced - the cultrue is heavily influenced" +
+                                    " by another, neighbouring world. If you have the details for " +
+                                    "the neighbouring world, choose a cultural quirk that this world" +
+                                    " has adopted. If not roll for one. ";
+                            //TODO: If adjacent to another planet, use their major culture.
+                            break;
+                        case 6:
+                            break;
+                    }
+                    break;
+                case 3:
+                    switch(dieRoll){
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                    break;
+                case 4:
+                    switch(dieRoll){
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                    break;
+                case 5:
+                    switch(dieRoll){
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                    break;
+                case 6:
+                    switch(dieRoll){
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
+                    break;
+            }
+        }
+
         private void createPlanetLaw(Planetoid planetoid){
             Log.d(TAG, "createPlanetLaw Called!");
             if(planetoid.PopRoll == 0){
                 planetoid.Law = "None";
                 planetoid.Description += "\n";
             }else{
-
+                //2d6-7+GovRoll
+                dieRoll = rollDie(5,-5) + GovRoll;
             }
         }
 
