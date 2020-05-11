@@ -8,17 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MainActivity extends AppCompatActivity {
-
-    /**
-     * @description Creates a standard XxY galaxy map for Android
-     * @param savedInstanceState
-     */
     private static final String TAG = "Galaxy Creator";
-    private Button makePlanetBtn;
     private TextView output;
     private int dieRoll;
 
@@ -28,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         output = findViewById(R.id.descriptionText);
-        makePlanetBtn = findViewById(R.id.makePlanet);
+        Button makePlanetBtn = findViewById(R.id.makePlanet);
         makePlanetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -40,10 +31,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @description Rolls a die between max and min inclusive
-     * @param max
-     * @param min
-     * @return
+     * @param max - Highest value possible
+     * @param min - Lowest value possible
+     * @return - Result of die roll
      */
     public int rollDie(int max, int min){
         if(min>=max){
@@ -53,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         return (int) (Math.random()*((max-min)+1))+min;
     }
 
-    public class Planetoid{
+    private class Planetoid{
 
         private static final String NAME = "Planet Name: ";
         private static final String STARPORTQUALITY = "\nStarport Quality: ";
@@ -77,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
         private String Hydro;
         private String Pop;
         private String Govt;
-        //private String Law;
+        private int LawRoll;
         private String Starport;
-        private String Tech;
+        private int Tech;
         private String Bases;
         private String TravelCodes;
         private String SurvivalGearReq;
@@ -90,112 +80,191 @@ public class MainActivity extends AppCompatActivity {
         private int GovRoll;
         private int CultureTensRoll;
         private int CultureOnesRoll;
-        private int LawRoll;
-        private int StarportRoll;
         private String printOut;
 
         private Planetoid(){
             Log.d(TAG, "Planet starts being made!");
-            createStarport(this);
-            createPlanetSize(this);
-            createPlanetAtmo(this);
-            createPlanetTemp(this);
-            createPlanetHydro(this);
-            createPlanetPop(this);
-            createPlanetGov(this);
-            createPlanetLaw(this);
-            createPlanetTech(this);
+            createStarport();
+            createPlanetSize();
+            createPlanetAtmo();
+            createPlanetTemp();
+            createPlanetHydro();
+            createPlanetPop();
+            createPlanetGov();
+            createPlanetLaw();
+            createPlanetTech();
+            Name += Bases;
+            //checkTradeCodes(this);
             Log.d(TAG, Name);
             printOut = NAME+Name+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+
                     Temp+HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+LawRoll+TECHLV+Tech+Description;
         }
 
-        private void createStarport(Planetoid planetoid){
-            planetoid.StarportRoll = rollDie(6, 2);
-            if(planetoid.StarportRoll <= 2){
-                planetoid.Starport = "X";
-            }else if(planetoid.StarportRoll <5){
-                planetoid.Starport = "E";
-            }else if(planetoid.StarportRoll<7){
-                planetoid.Starport = "D";
-            }else if(planetoid.StarportRoll<9){
-                planetoid.Starport = "C";
-            }else if(planetoid.StarportRoll<11){
-                planetoid.Starport = "B";
+        private void createStarport(){
+            dieRoll = rollDie(12, 2);
+            Log.d(TAG, "Starport: "+dieRoll);
+            if(dieRoll <= 2){
+                Starport = "X";
+            }else if(dieRoll <5){
+                Starport = "E";
+            }else if(dieRoll<7){
+                Starport = "D";
+            }else if(dieRoll<9){
+                Starport = "C";
+            }else if(dieRoll<11){
+                Starport = "B";
             }else{
-                planetoid.Starport = "A";
+                Starport = "A";
             }
-            planetoid.Name += planetoid.Starport;
+            rollForBases();
+            Name = Starport;
         }
 
-        private void createPlanetSize(Planetoid planetoid){
-            Log.d(TAG, "createPlanetSize Called");
-            planetoid.SizeRoll = rollDie(10,0);
-            if(planetoid.SizeRoll == 10){
-                planetoid.Name += "A";
-            }else{
-                planetoid.Name += planetoid.SizeRoll;
+        private void rollForBases( ){
+            Bases = "     ";
+            switch (Starport){
+                case "A":
+                    if(checkRollStd(8)){
+                        Bases  += "N";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "S";
+                    }
+                    if(checkRollStd(8)){
+                        Bases  += "R";
+                    }
+                    if(checkRollStd(4)){
+                        Bases  += "T";
+                    }
+                    if(checkRollStd(6)){
+                        Bases  += "I";
+                    }
+                    break;
+                case "B":
+                    if(checkRollStd(8)){
+                        Bases  += "N";
+                    }
+                    if(checkRollStd(8)){
+                        Bases  += "S";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "R";
+                    }
+                    if(checkRollStd(6)){
+                        Bases  += "T";
+                    }
+                    if(checkRollStd(8)){
+                        Bases  += "I";
+                    }
+                    if(checkRollStd(12)){
+                        Bases  += "P";
+                    }
+                    break;
+                case "C":
+                    if(checkRollStd(8)){
+                        Bases  += "S";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "R";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "T";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "I";
+                    }
+                    if(checkRollStd(10)){
+                        Bases  += "P";
+                    }
+                    break;
+                case "D":
+                    if(checkRollStd(7)){
+                        Bases  += "S";
+                    }
+                    if(checkRollStd(12)){
+                        Bases  += "P";
+                    }
+                    break;
+                case "E":
+                    if(checkRollStd(12)){
+                        Bases  += "P";
+                    }
+                    break;
             }
-            switch (planetoid.SizeRoll) {
+        }
+
+        private boolean checkRollStd(int target){
+            return rollDie(12, 2) >= target;
+        }
+
+        private void createPlanetSize( ){
+            Log.d(TAG, "createPlanetSize Called");
+            SizeRoll = rollDie(10,0);
+            if(SizeRoll == 10){
+                Name += "A";
+            }else{
+                Name += SizeRoll;
+            }
+            switch (SizeRoll) {
                 case 0:
                     Log.d(TAG, "Die roll is 0");
-                    planetoid.Size = "800 km";
-                    planetoid.Gs = "Negligible";
-                    planetoid.Description += "Size of an Asteroid or orbital complex. ";
+                    Size = "800 km";
+                    Gs = "Negligible";
+                    Description += "Size of an Asteroid or orbital complex ";
                     break;
                 case 1:
                     Log.d(TAG, "Die roll is 1");
-                    planetoid.Size = "1,600 km";
-                    planetoid.Gs = "0.05";
+                    Size = "1,600 km";
+                    Gs = "005";
                     break;
                 case 2:
                     Log.d(TAG, "Die roll is 2");
-                    planetoid.Size = "3,200 km";
-                    planetoid.Gs = "0.15";
-                    planetoid.Description += "Size of Triton, Luna, or Europa. ";
+                    Size = "3,200 km";
+                    Gs = "015";
+                    Description += "Size of Triton, Luna, or Europa ";
                     break;
                 case 3:
                     Log.d(TAG, "Die roll is 3");
-                    planetoid.Size = "4,800 km";
-                    planetoid.Gs = "0.25";
-                    planetoid.Description += "Size of Mercury or Ganymede. ";
+                    Size = "4,800 km";
+                    Gs = "025";
+                    Description += "Size of Mercury or Ganymede ";
                     break;
                 case 4:
                     Log.d(TAG, "Die roll is 4");
-                    planetoid.Size = "6,400 km";
-                    planetoid.Gs = "0.35";
-                    planetoid.Description += "Size of Mars. ";
+                    Size = "6,400 km";
+                    Gs = "035";
+                    Description += "Size of Mars ";
                     break;
                 case 5:
                     Log.d(TAG, "Die roll is 5");
-                    planetoid.Size = "8,000 km";
-                    planetoid.Gs = "0.45";
+                    Size = "8,000 km";
+                    Gs = "045";
                     break;
                 case 6:
                     Log.d(TAG, "Die roll is 6");
-                    planetoid.Size = "9,600 km";
-                    planetoid.Gs = "0.7";
+                    Size = "9,600 km";
+                    Gs = "07";
                     break;
                 case 7:
                     Log.d(TAG, "Die roll is 7");
-                    planetoid.Size = "11,200 km";
-                    planetoid.Gs = "0.9";
+                    Size = "11,200 km";
+                    Gs = "09";
                     break;
                 case 8:
                     Log.d(TAG, "Die roll is 8");
-                    planetoid.Size = "12,800 km";
-                    planetoid.Gs = "1.0";
-                    planetoid.Description += "Size of Earth. ";
+                    Size = "12,800 km";
+                    Gs = "10";
+                    Description += "Size of Earth ";
                     break;
                 case 9:
                     Log.d(TAG, "Die roll is 9");
-                    planetoid.Size = "14,400 km";
-                    planetoid.Gs = "1.25";
+                    Size = "14,400 km";
+                    Gs = "125";
                     break;
                 case 10:
                     Log.d(TAG, "Die roll is 10");
-                    planetoid.Size = "16,000 km";
-                    planetoid.Gs = "1.4";
+                    Size = "16,000 km";
+                    Gs = "14";
                     break;
                 default:
                     Log.e(TAG, "Something went wrong in createPlanetSize");
@@ -203,616 +272,616 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        private void createPlanetAtmo(Planetoid planetoid){
+        private void createPlanetAtmo( ){
             Log.d(TAG, "createPlanetAtmo Called!");
-            planetoid.AtmoRoll = rollDie(5, -5) + planetoid.SizeRoll;
-            if(planetoid.AtmoRoll < 1){
+            AtmoRoll = rollDie(5, -5) + SizeRoll;
+            if(AtmoRoll < 1){
                 //No Atmo
-                planetoid.Name += "0";
-                planetoid.Atmo = "None";
-                planetoid.Description += "Moon like atmosphere. ";
-                planetoid.Pressure = "0.0";
-                planetoid.SurvivalGearReq = "Vacc Suit";
+                Name += "0";
+                Atmo = "None";
+                Description += "Moon like atmosphere ";
+                Pressure = "00";
+                SurvivalGearReq = "Vacc Suit";
             }else{
-                if(planetoid.AtmoRoll<10){
-                    planetoid.Name += AtmoRoll;
+                if(AtmoRoll<10){
+                    Name += AtmoRoll;
                 }
-                switch(planetoid.AtmoRoll){
+                switch(AtmoRoll){
                     case 1:
-                        planetoid.Atmo = "Trace";
-                        planetoid.Description += "Mars like atmosphere. ";
-                        planetoid.Pressure = "0.001-0.09";
-                        planetoid.SurvivalGearReq = "Vacc Suit";
+                        Atmo = "Trace";
+                        Description += "Mars like atmosphere ";
+                        Pressure = "0001-009";
+                        SurvivalGearReq = "Vacc Suit";
                         break;
                     case 2:
-                        planetoid.Atmo = "Very Thin, Tainted";
-                        planetoid.Pressure = "0.1-0.42";
-                        planetoid.SurvivalGearReq = "Respirator, Filter";
+                        Atmo = "Very Thin, Tainted";
+                        Pressure = "01-042";
+                        SurvivalGearReq = "Respirator, Filter";
                         break;
                     case 3:
-                        planetoid.Atmo = "Very Thin";
-                        planetoid.Pressure = "0.1-0.42";
-                        planetoid.SurvivalGearReq = "Respirator";
+                        Atmo = "Very Thin";
+                        Pressure = "01-042";
+                        SurvivalGearReq = "Respirator";
                         break;
                     case 4:
-                        planetoid.Atmo = "Thin, Tainted";
-                        planetoid.Pressure = "0.43-0.7";
-                        planetoid.SurvivalGearReq = "Filter";
+                        Atmo = "Thin, Tainted";
+                        Pressure = "043-07";
+                        SurvivalGearReq = "Filter";
                         break;
                     case 5:
-                        planetoid.Atmo = "Thin";
-                        planetoid.Pressure = "0.43-0.7";
+                        Atmo = "Thin";
+                        Pressure = "043-07";
                         break;
                     case 6:
-                        planetoid.Atmo = "Standard";
-                        planetoid.Description += "Earth like atmosphere. ";
-                        planetoid.Pressure = "0.71-1.49";
+                        Atmo = "Standard";
+                        Description += "Earth like atmosphere ";
+                        Pressure = "071-149";
                         break;
                     case 7:
-                        planetoid.Atmo = "Standard, Tainted";
-                        planetoid.Pressure = "0.71-1.49";
-                        planetoid.SurvivalGearReq = "Filter";
+                        Atmo = "Standard, Tainted";
+                        Pressure = "071-149";
+                        SurvivalGearReq = "Filter";
                         break;
                     case 8:
-                        planetoid.Atmo = "Dense";
-                        planetoid.Pressure = "1.5-2.49";
+                        Atmo = "Dense";
+                        Pressure = "15-249";
                         break;
                     case 9:
-                        planetoid.Atmo = "Dense, Tainted";
-                        planetoid.Pressure = "1.5-2.49";
-                        planetoid.SurvivalGearReq = "Filter";
+                        Atmo = "Dense, Tainted";
+                        Pressure = "15-249";
+                        SurvivalGearReq = "Filter";
                         break;
                     case 10:
-                        planetoid.Name += "A";
-                        planetoid.Atmo = "Exotic";
-                        planetoid.Description += "Atmosphere is unbreathable to humans but otherwise" +
-                                " not hazardous. ";
-                        planetoid.Pressure = "Varies";
-                        planetoid.SurvivalGearReq = "Air Supply";
+                        Name += "A";
+                        Atmo = "Exotic";
+                        Description += "Atmosphere is unbreathable to humans but otherwise" +
+                                " not hazardous ";
+                        Pressure = "Varies";
+                        SurvivalGearReq = "Air Supply";
                         break;
                     case 11:
-                        planetoid.Name += "B";
-                        planetoid.Atmo = "Corrosive";
-                        planetoid.Description += "Venus like atmosphere. Highly dangerous: anyone" +
+                        Name += "B";
+                        Atmo = "Corrosive";
+                        Description += "Venus like atmosphere Highly dangerous: anyone" +
                                 " who breathes this corrosive atmosphere will suffer 1d6 damage " +
-                                "per round. ";
-                        planetoid.Pressure = "Varies";
-                        planetoid.SurvivalGearReq = "Vacc Suit";
+                                "per round ";
+                        Pressure = "Varies";
+                        SurvivalGearReq = "Vacc Suit";
                         break;
                     case 12:
-                        planetoid.Name += "C";
-                        planetoid.Atmo = "Insidious";
-                        planetoid.Pressure = "Varies";
-                        planetoid.SurvivalGearReq = "Vacc Suit";
-                        planetoid.Description += "Unsafe to be there for longer than "
+                        Name += "C";
+                        Atmo = "Insidious";
+                        Pressure = "Varies";
+                        SurvivalGearReq = "Vacc Suit";
+                        Description += "Unsafe to be there for longer than "
                                 + rollDie(12,2) + " hours due to degradation of equipment" +
-                                " as it deals with the harsh atmosphere. This can be prevented with" +
-                                " vigilant maintenance or advanced protective gear. ";
+                                " as it deals with the harsh atmosphere This can be prevented with" +
+                                " vigilant maintenance or advanced protective gear ";
                         break;
                     case 13:
-                        planetoid.Name += "D";
-                        planetoid.Atmo = "Dense, High";
-                        planetoid.Pressure = "2.5+";
+                        Name += "D";
+                        Atmo = "Dense, High";
+                        Pressure = "25+";
                         break;
                     case 14:
-                        planetoid.Name += "E";
-                        planetoid.Atmo = "Thin, Low";
-                        planetoid.Pressure = "0.5 or less";
+                        Name += "E";
+                        Atmo = "Thin, Low";
+                        Pressure = "05 or less";
                         break;
                     case 15:
-                        planetoid.Name += "F";
-                        planetoid.Atmo = "Unusual";
-                        planetoid.Pressure = "Varies";
-                        planetoid.SurvivalGearReq = "Varies";
+                        Name += "F";
+                        Atmo = "Unusual";
+                        Pressure = "Varies";
+                        SurvivalGearReq = "Varies";
                         break;
                     default:
-                        Log.e(TAG, "Something went wrong in Atmo creation.");
+                        Log.e(TAG, "Something went wrong in Atmo creation");
                 }
-                if (planetoid.Description.contains("Tainted")){
-                    planetoid.Description += "Breathing this atmosphere causes 1d6 damage every few minutes.";
+                if (Description.contains("Tainted")){
+                    Description += "Breathing this atmosphere causes 1d6 damage every few minutes";
                 }
             }
 
     }
 
-        private void createPlanetTemp(Planetoid planetoid){
+        private void createPlanetTemp( ){
             Log.d(TAG, "createPlanetTemp Called!");
             dieRoll = rollDie(12,2);
             Log.d(TAG, "Temp Die: "+dieRoll);
-            Log.d(TAG, "Atmo Roll: "+planetoid.AtmoRoll);
-            if(planetoid.AtmoRoll<2){
-                planetoid.Description += "Temperatures swing wildly from roasting during the day " +
-                        "to freezing at night. ";
-            }else if(planetoid.AtmoRoll == 2||planetoid.AtmoRoll == 3){
+            Log.d(TAG, "Atmo Roll: "+AtmoRoll);
+            if(AtmoRoll<2){
+                Description += "Temperatures swing wildly from roasting during the day " +
+                        "to freezing at night ";
+            }else if(AtmoRoll == 2||AtmoRoll == 3){
                 dieRoll -= 2;
-            }else if(planetoid.AtmoRoll == 4||planetoid.AtmoRoll == 5 || planetoid.AtmoRoll == 14) {
+            }else if(AtmoRoll == 4||AtmoRoll == 5 || AtmoRoll == 14) {
                 dieRoll -= 1;
-            }else if(planetoid.AtmoRoll == 8||planetoid.AtmoRoll == 9){
+            }else if(AtmoRoll == 8||AtmoRoll == 9){
                 dieRoll += 1;
-            }else if(planetoid.AtmoRoll == 10||planetoid.AtmoRoll == 13||planetoid.AtmoRoll == 15){
+            }else if(AtmoRoll == 10||AtmoRoll == 13||AtmoRoll == 15){
                 dieRoll += 2;
-            }else if(planetoid.AtmoRoll == 11||planetoid.AtmoRoll == 12){
+            }else if(AtmoRoll == 11||AtmoRoll == 12){
                 dieRoll += 6;
             }
             Log.d(TAG, "Temp Prog: "+dieRoll);
 
             if(dieRoll <3){
-                planetoid.Temp = "Frozen: >-51\u2103";
-                planetoid.Description += "Frozen world. No liquid water, very dry atmostphere. ";
+                Temp = "Frozen: >-51\u2103";
+                Description += "Frozen world No liquid water, very dry atmostphere ";
             }else if(dieRoll == 3||dieRoll == 4){
-                planetoid.Temp = "Cold: -51-0\u2103";
-                planetoid.Description += "Icy world. Little liquid water, extensive ice caps, few clouds. ";
+                Temp = "Cold: -51-0\u2103";
+                Description += "Icy world Little liquid water, extensive ice caps, few clouds ";
             }else if(dieRoll<10){
                 Log.d(TAG, "Planet Temperate");
-                planetoid.Temp = "Temperate: 0-90\u2103";
-                planetoid.Description += "Temperate world. Earthlike. Liquid and vaporised water are" +
-                        " common, moderate ice caps. ";
+                Temp = "Temperate: 0-90\u2103";
+                Description += "Temperate world Earthlike Liquid and vaporised water are" +
+                        " common, moderate ice caps ";
             }else if(dieRoll == 10||dieRoll == 11){
-                planetoid.Temp = "Hot: 31-80\u2103";
-                planetoid.Description += "Hot world. Small or no ice caps, little liquid water." +
-                        " Most water in the form of clouds. ";
+                Temp = "Hot: 31-80\u2103";
+                Description += "Hot world Small or no ice caps, little liquid water" +
+                        " Most water in the form of clouds ";
             }else{
-                planetoid.Temp = "Roasting: 81\u2103+";
-                planetoid.Description += "Boiling world. No ice caps, little liquid water. ";
+                Temp = "Roasting: 81\u2103+";
+                Description += "Boiling world No ice caps, little liquid water ";
             }
-            Log.d(TAG, "Planet Temp in Temp: "+planetoid.Temp);
+            Log.d(TAG, "Planet Temp in Temp: "+Temp);
         }
 
-        private void createPlanetHydro(Planetoid planetoid){
+        private void createPlanetHydro( ){
             Log.d(TAG, "createPlanetHydro Called!");
-            if(planetoid.SizeRoll<2){
-                Log.d(TAG, "Planetoid to small for water!");
-                planetoid.Hydro = "0";
+            if(SizeRoll<2){
+                Log.d(TAG, " to small for water!");
+                Hydro = "0";
                 HydroRoll = 0;
             }else{
                 //2d6-7+Size
-                HydroRoll = rollDie(5,-5) + planetoid.SizeRoll;
+                HydroRoll = rollDie(5,-5) + SizeRoll;
                 Log.d(TAG, "Die Roll in Hydro: "+dieRoll);
-                if(planetoid.AtmoRoll == 0||planetoid.AtmoRoll == 1||(planetoid.AtmoRoll>9&&planetoid.AtmoRoll<13)){
+                if(AtmoRoll == 0||AtmoRoll == 1||(AtmoRoll>9&&AtmoRoll<13)){
                     HydroRoll -=4;
                 }
-                if(planetoid.Temp.contains("Hot")){
+                if(Temp.contains("Hot")){
                     HydroRoll -= 2;
-                }else if(planetoid.Temp.contains("Roasting")){
+                }else if(Temp.contains("Roasting")){
                     HydroRoll -= 6;
                 }
 
                 if(HydroRoll<1){
-                    planetoid.Name += "0";
-                    planetoid.Hydro = "0-5%";
-                    planetoid.Description += "Desert world. ";
+                    Name += "0";
+                    Hydro = "0-5%";
+                    Description += "Desert world ";
                 }else if(HydroRoll>10){
-                    planetoid.Name += "A";
-                    planetoid.Hydro = "96-100%";
-                    planetoid.Description += "Almost entirely water. ";
+                    Name += "A";
+                    Hydro = "96-100%";
+                    Description += "Almost entirely water ";
                 }else{
-                    planetoid.Name += HydroRoll;
+                    Name += HydroRoll;
                     switch (HydroRoll){
                         case 1:
-                            planetoid.Hydro = "6-15%";
-                            planetoid.Description += "Dry world. ";
+                            Hydro = "6-15%";
+                            Description += "Dry world ";
                             break;
                         case 2:
-                            planetoid.Hydro = "16-25%";
-                            planetoid.Description += "A few small seas. ";
+                            Hydro = "16-25%";
+                            Description += "A few small seas ";
                             break;
                         case 3:
-                            planetoid.Hydro = "26-35%";
-                            planetoid.Description += "Small seas and oceans. ";
+                            Hydro = "26-35%";
+                            Description += "Small seas and oceans ";
                             break;
                         case 4:
-                            planetoid.Hydro = "36-45%";
-                            planetoid.Description += "Wet world. ";
+                            Hydro = "36-45%";
+                            Description += "Wet world ";
                             break;
                         case 5:
-                            planetoid.Hydro = "46-55%";
-                            planetoid.Description += "Large oceans. ";
+                            Hydro = "46-55%";
+                            Description += "Large oceans ";
                             break;
                         case 6:
-                            planetoid.Hydro = "56-65%";
+                            Hydro = "56-65%";
                             break;
                         case 7:
-                            planetoid.Hydro = "66-75%";
-                            planetoid.Description += "Earthlike amount of water. ";
+                            Hydro = "66-75%";
+                            Description += "Earthlike amount of water ";
                             break;
                         case 8:
-                            planetoid.Hydro = "76-85%";
-                            planetoid.Description += "Water world. ";
+                            Hydro = "76-85%";
+                            Description += "Water world ";
                             break;
                         case 9:
-                            planetoid.Hydro = "86-95%";
-                            planetoid.Description += "Only a few small islands and archipelagos. ";
+                            Hydro = "86-95%";
+                            Description += "Only a few small islands and archipelagos ";
                             break;
                         default:
-                            Log.e(TAG, "Something went wrong in the Hydro Switch.");
+                            Log.e(TAG, "Something went wrong in the Hydro Switch");
                             break;
                     }
                 }
             }
         }
 
-        private void createPlanetPop(Planetoid planetoid){
+        private void createPlanetPop( ){
             Log.d(TAG, "createPlanetPop Called!");
-            planetoid.PopRoll = rollDie(10,0);
-            Log.d(TAG, "Pop Roll: "+planetoid.PopRoll);
-            if(planetoid.PopRoll == 10){
-                planetoid.Name += "A";
+            PopRoll = rollDie(10,0);
+            Log.d(TAG, "Pop Roll: "+PopRoll);
+            if(PopRoll == 10){
+                Name += "A";
                 Pop = "Tens of billions";
-                planetoid.Description += "Population of tens of billions. ";
+                Description += "Population of tens of billions ";
             }else{
-                planetoid.Name += planetoid.PopRoll;
-                switch (planetoid.PopRoll){
+                Name += PopRoll;
+                switch (PopRoll){
                     case 0:
                         Pop = "None";
-                        planetoid.Description += "Uninhabited. ";
+                        Description += "Uninhabited ";
                         break;
                     case 1:
                         Pop = "Few";
-                        planetoid.Description += "Population consisting of a tiny farmstead" +
-                                " or a large family. ";
+                        Description += "Population consisting of a tiny farmstead" +
+                                " or a large family ";
                         break;
                     case 2:
                         Pop = "Hundreds";
-                        planetoid.Description += "Population consisting of a village. ";
+                        Description += "Population consisting of a village ";
                         break;
                     case 3:
                         Pop = "Thousands";
-                        planetoid.Description += "Population of thousands. ";
+                        Description += "Population of thousands ";
                         break;
                     case 4:
                         Pop = "Tens of thousands";
-                        planetoid.Description += "Population consisting of a small town. ";
+                        Description += "Population consisting of a small town ";
                         break;
                     case 5:
                         Pop = "Hundreds of thousands";
-                        planetoid.Description += "Population consisting of an average city. ";
+                        Description += "Population consisting of an average city ";
                         break;
                     case 6:
                         Pop = "Millions";
-                        planetoid.Description += "Population of millions. ";
+                        Description += "Population of millions ";
                         break;
                     case 7:
                         Pop = "Tens of millions";
-                        planetoid.Description += "Population consisting of a large city. ";
+                        Description += "Population consisting of a large city ";
                         break;
                     case 8:
                         Pop = "Hundreds of millions";
-                        planetoid.Description += "Population of hundreds of millions. ";
+                        Description += "Population of hundreds of millions ";
                         break;
                     case 9:
                         Pop = "Billions";
-                        planetoid.Description += "Population similar to present day Earth. ";
+                        Description += "Population similar to present day Earth ";
                         break;
                     default:
-                        Log.e(TAG, "Something went wrong in planet pop generator.");
+                        Log.e(TAG, "Something went wrong in planet pop generator");
                         break;
                 }
             }
         }
 
-        private void createPlanetGov(Planetoid planetoid){
+        private void createPlanetGov( ){
             Log.d(TAG, "createPlanetGov Called!");
-            if(planetoid.PopRoll == 0){
-                planetoid.Govt = "None";
-                planetoid.Description += "No government structure. In many cases, family bonds" +
-                        "predominate. Examples include a Family, Clan, or total Anarchy. Little" +
-                        " could be considered illegal here. ";
+            if(PopRoll == 0){
+                Govt = "None";
+                Description += "No government structure In many cases, family bonds" +
+                        "predominate Examples include a Family, Clan, or total Anarchy Little" +
+                        " could be considered illegal here ";
             }else{
-                planetoid.GovRoll = rollDie(5,-5) + planetoid.PopRoll;
-                Log.d(TAG, "GovRoll: "+ planetoid.GovRoll);
-                if(planetoid.GovRoll <= 0){
-                    planetoid.Govt = "None";
-                    planetoid.Description += "No government structure. In many cases, family bonds" +
-                            "predominate. Examples include a Family, Clan, or total Anarchy. Little" +
-                            " could be considered illegal here. ";
-                    planetoid.Name += "0";
-                }else if(planetoid.GovRoll >= 13){
-                    planetoid.Govt = "Religious Dictatorship";
-                    planetoid.Description += "Ruling functions are " +
+                GovRoll = rollDie(5,-5) + PopRoll;
+                Log.d(TAG, "GovRoll: "+ GovRoll);
+                if(GovRoll <= 0){
+                    Govt = "None";
+                    Description += "No government structure In many cases, family bonds" +
+                            "predominate Examples include a Family, Clan, or total Anarchy Little" +
+                            " could be considered illegal here ";
+                    Name += "0";
+                }else if(GovRoll >= 13){
+                    Govt = "Religious Dictatorship";
+                    Description += "Ruling functions are " +
                             "performed by a religious organisation without regard to the specific " +
-                            "individual needs of the citizenry. Examples include cults, transcendent" +
-                            " philosophy, or psionic group minds. Who is to say what they do or do " +
-                            "not want in their sectors. ";
-                    planetoid.Name += "D";
+                            "individual needs of the citizenry Examples include cults, transcendent" +
+                            " philosophy, or psionic group minds Who is to say what they do or do " +
+                            "not want in their sectors ";
+                    Name += "D";
                 }else{
-                    switch (planetoid.GovRoll){
+                    switch (GovRoll){
                         case 1:
-                            planetoid.Govt = "Company/Corporation";
-                            planetoid.Description += "Ruling functions are assumed by a company " +
+                            Govt = "Company/Corporation";
+                            Description += "Ruling functions are assumed by a company " +
                                     "managerial elite, and most citizenry are company employees " +
-                                    "or dependants. Examples include a corporate outpost, asteroid " +
-                                    "mine, or a feudal domain. Likely would not appreciate weapons, " +
-                                    "drugs, or Travellers in their space. ";
+                                    "or dependants Examples include a corporate outpost, asteroid " +
+                                    "mine, or a feudal domain Likely would not appreciate weapons, " +
+                                    "drugs, or Travellers in their space ";
                             break;
                         case 2:
-                            planetoid.Govt = "Participating Democracy";
-                            planetoid.Description += "Ruling functions are reached by the advise " +
-                                    "and consent of the citizenry directly. Examples include a " +
-                                    "collective, tribal council, or comm-linked consensus. Such " +
-                                    "civilizations tend to be weary of drugs. ";
+                            Govt = "Participating Democracy";
+                            Description += "Ruling functions are reached by the advise " +
+                                    "and consent of the citizenry directly Examples include a " +
+                                    "collective, tribal council, or comm-linked consensus Such " +
+                                    "civilizations tend to be weary of drugs ";
                             break;
                         case 3:
-                            planetoid.Govt = "Self-perpetuating Oligarchy";
-                            planetoid.Description += "Ruling functions are preformed by a restricted" +
+                            Govt = "Self-perpetuating Oligarchy";
+                            Description += "Ruling functions are preformed by a restricted" +
                                     " minority, with little to no input from the mass of the " +
-                                    "citizenry. Exmaples include a plutocracy or a hereditary ruling" +
-                                    " caste. They do no tend to like weapons, technology, or Travellers. ";
+                                    "citizenry Exmaples include a plutocracy or a hereditary ruling" +
+                                    " caste They do no tend to like weapons, technology, or Travellers ";
                             break;
                         case 4:
-                            planetoid.Govt = "Represenative Democracy";
-                            planetoid.Description += "Ruling functions are preformed by elected " +
-                                    "representatives. Examples include a republic or democracy. " +
-                                    "Likely would not appreciate drugs, weapons, or psionics.";
+                            Govt = "Represenative Democracy";
+                            Description += "Ruling functions are preformed by elected " +
+                                    "representatives Examples include a republic or democracy " +
+                                    "Likely would not appreciate drugs, weapons, or psionics";
                             break;
                         case 5:
-                            planetoid.Govt = "Feudal Techocracy";
-                            planetoid.Description += "Ruling functions are preformed by specific " +
-                                    "individuals for persons who agree to be ruled by them. " +
+                            Govt = "Feudal Techocracy";
+                            Description += "Ruling functions are preformed by specific " +
+                                    "individuals for persons who agree to be ruled by them " +
                                     "Relationships are based on the performance of technical " +
-                                    "activities which are mutually beneficial.They do not tend to " +
-                                    "like outside weapons, technology, or computers. ";
+                                    "activities which are mutually beneficialThey do not tend to " +
+                                    "like outside weapons, technology, or computers ";
                             break;
                         case 6:
-                            planetoid.Govt = "Captive Government";
-                            planetoid.Description += "Ruling functions are performed by an imposed " +
-                                    "leadership answerable to an outside group. Examples include a " +
-                                    "colony or conquered area. Contraband here may include weapons, " +
-                                    "technology, or Travellers. ";
+                            Govt = "Captive Government";
+                            Description += "Ruling functions are performed by an imposed " +
+                                    "leadership answerable to an outside group Examples include a " +
+                                    "colony or conquered area Contraband here may include weapons, " +
+                                    "technology, or Travellers ";
                             break;
                         case 7:
-                            planetoid.Govt = "Balkanisation";
-                            planetoid.Description += "No central authority exists rival governments" +
-                                    " complete for control. Law Level refers to the government " +
-                                    "nearest the starport. Examples include multiple governments " +
-                                    "involved in a civil war. They could have an aversion to anything. ";
+                            Govt = "Balkanisation";
+                            Description += "No central authority exists rival governments" +
+                                    " complete for control Law Level refers to the government " +
+                                    "nearest the starport Examples include multiple governments " +
+                                    "involved in a civil war They could have an aversion to anything ";
                             break;
                         case 8:
-                            planetoid.Govt = "Civil Service Bureaucracy";
-                            planetoid.Description += "Ruling functions are performed by government " +
-                                    "agencies employing individuals selected for their expertise. " +
-                                    "Examples include a technocracy or communism. They likely look " +
-                                    "down on drugs and weapons. ";
+                            Govt = "Civil Service Bureaucracy";
+                            Description += "Ruling functions are performed by government " +
+                                    "agencies employing individuals selected for their expertise " +
+                                    "Examples include a technocracy or communism They likely look " +
+                                    "down on drugs and weapons ";
                             break;
                         case 9:
-                            planetoid.Govt = "Impersonal Bureaucracy";
-                            planetoid.Description += "Ruling functions are performed by agencies " +
-                                    "which have become insulated from the governed citizens. Examples " +
-                                    "include entrenched castes of bureaucrats or a decaying empire. " +
+                            Govt = "Impersonal Bureaucracy";
+                            Description += "Ruling functions are performed by agencies " +
+                                    "which have become insulated from the governed citizens Examples " +
+                                    "include entrenched castes of bureaucrats or a decaying empire " +
                                     "They do like technology, weapons, drugs, Travellers, or " +
-                                    "psionics typically. ";
+                                    "psionics typically ";
                             break;
                         case 10:
-                            planetoid.Govt = "Charismatic Dictator";
-                            planetoid.Description += "Ruling functions are performed by agencies " +
+                            Govt = "Charismatic Dictator";
+                            Description += "Ruling functions are performed by agencies " +
                                     "directed by a single leader who enjoys the overwhelming " +
-                                    "confidence of the citizens. Examples include a revolutionary " +
-                                    "leader, messiah, or emperor. Only the dictator can decide what " +
-                                    "is illegal here. ";
-                            planetoid.Name += "A";
+                                    "confidence of the citizens Examples include a revolutionary " +
+                                    "leader, messiah, or emperor Only the dictator can decide what " +
+                                    "is illegal here ";
+                            Name += "A";
                             break;
                         case 11:
-                            planetoid.Govt = "Non-charismatic Leader";
-                            planetoid.Description += "A previous charismatic dictator " +
-                                    "has been replaced by a leader through normal channels. Examples include" +
-                                    " military dictatorship or hereditary kingship. They do not appreciate " +
-                                    "weapons, technology, or computers from other lands. ";
-                            planetoid.Name += "B";
+                            Govt = "Non-charismatic Leader";
+                            Description += "A previous charismatic dictator " +
+                                    "has been replaced by a leader through normal channels Examples include" +
+                                    " military dictatorship or hereditary kingship They do not appreciate " +
+                                    "weapons, technology, or computers from other lands ";
+                            Name += "B";
                             break;
                         case 12:
-                            planetoid.Govt = "Charismatic Oligarchy";
-                            planetoid.Description += "Ruling functions are performed" +
+                            Govt = "Charismatic Oligarchy";
+                            Description += "Ruling functions are performed" +
                                     " by a select group of members of an organisation or class which enjoys " +
-                                    "the overwhelming confidence of the citizenry. Examples include junta, " +
-                                    "or a revolutionary council. They tend not to appreciate weapons around them. ";
-                            planetoid.Name += "C";
+                                    "the overwhelming confidence of the citizenry Examples include junta, " +
+                                    "or a revolutionary council They tend not to appreciate weapons around them ";
+                            Name += "C";
                             break;
                         default:
                             Log.e(TAG, "Something went wrong in Primary Gov Assign Switch");
                     }
-                    if(planetoid.GovRoll<10){
-                        planetoid.Name += planetoid.GovRoll;
+                    if(GovRoll<10){
+                        Name += GovRoll;
                     }
-                    rollCulture(planetoid);
+                    rollCulture();
 
                     //Decide number of factions
                     int factionRoll = rollDie(3,1);
-                    if(planetoid.GovRoll == 0||planetoid.GovRoll == 7){
+                    if(GovRoll == 0||GovRoll == 7){
                          factionRoll += 1;
-                    }else if(planetoid.GovRoll > 10){
+                    }else if(GovRoll > 10){
                         factionRoll -= 1;
                     }
 
                     //Make a faction for each
                     if(factionRoll > 0){
-                        planetoid.Description += "\n\nThere are "+factionRoll+" other factions on the " +
-                                "planet as well. ";
+                        Description += "\n\nThere are "+factionRoll+" other factions on the " +
+                                "planet as well ";
                         for(int f=1;f<=factionRoll;f++){
-                            planetoid.Description += "\n\nSplinter faction #"+f+": ";
-                            rollFactionGov(planetoid);
+                            Description += "\n\nSplinter faction #"+f+": ";
+                            rollFactionGov();
                         }
                     }
                 }
             }
         }
 
-        private void rollFactionGov(Planetoid planetoid){
+        private void rollFactionGov( ){
             int factionGovRoll = rollDie(13,0);
             switch (factionGovRoll){
                 case 1:
-                    planetoid.Description += "Company/Corporation: Ruling functions are assumed by a company " +
+                    Description += "Company/Corporation: Ruling functions are assumed by a company " +
                             "managerial elite, and most citizenry are company employees " +
-                            "or dependants. Examples include a corporate outpost, asteroid " +
-                            "mine, or a feudal domain. Likely would not appreciate weapons, " +
-                            "drugs, or Travellers in their space. ";
+                            "or dependants Examples include a corporate outpost, asteroid " +
+                            "mine, or a feudal domain Likely would not appreciate weapons, " +
+                            "drugs, or Travellers in their space ";
                     break;
                 case 2:
-                    planetoid.Description += "Participating Democracy: " +
+                    Description += "Participating Democracy: " +
                             "Ruling functions are reached by the advise " +
-                            "and consent of the citizenry directly. Examples include a " +
-                            "collective, tribal council, or comm-linked consensus. Such " +
-                            "civilizations tend to be weary of drugs. ";
+                            "and consent of the citizenry directly Examples include a " +
+                            "collective, tribal council, or comm-linked consensus Such " +
+                            "civilizations tend to be weary of drugs ";
                     break;
                 case 3:
-                    planetoid.Description += "Self-perpetuating Oligarchy: " +
+                    Description += "Self-perpetuating Oligarchy: " +
                             "Ruling functions are preformed by a restricted" +
                             " minority, with little to no input from the mass of the " +
-                            "citizenry. Exmaples include a plutocracy or a hereditary ruling" +
-                            " caste. They do no tend to like weapons, technology, or Travellers. ";
+                            "citizenry Exmaples include a plutocracy or a hereditary ruling" +
+                            " caste They do no tend to like weapons, technology, or Travellers ";
                     break;
                 case 4:
-                    planetoid.Description += "Representative Democracy: " +
+                    Description += "Representative Democracy: " +
                             "Ruling functions are preformed by elected " +
-                            "representatives. Examples include a republic or democracy. " +
-                            "Likely would not appreciate drugs, weapons, or psionics.";
+                            "representatives Examples include a republic or democracy " +
+                            "Likely would not appreciate drugs, weapons, or psionics";
                     break;
                 case 5:
-                    planetoid.Description += "Feudal Technocracy: " +
+                    Description += "Feudal Technocracy: " +
                             "Ruling functions are preformed by specific " +
-                            "individuals for persons who agree to be ruled by them. " +
+                            "individuals for persons who agree to be ruled by them " +
                             "Relationships are based on the performance of technical " +
-                            "activities which are mutually beneficial.They do not tend to " +
-                            "like outside weapons, technology, or computers. ";
+                            "activities which are mutually beneficialThey do not tend to " +
+                            "like outside weapons, technology, or computers ";
                     break;
                 case 6:
-                    planetoid.Description += "Captive Government: " +
+                    Description += "Captive Government: " +
                             "Ruling functions are performed by an imposed " +
-                            "leadership answerable to an outside group. Examples include a " +
-                            "colony or conquered area. Contraband here may include weapons, " +
-                            "technology, or Travellers. ";
+                            "leadership answerable to an outside group Examples include a " +
+                            "colony or conquered area Contraband here may include weapons, " +
+                            "technology, or Travellers ";
                     break;
                 case 7:
-                    planetoid.Description += "Balkanisation: No central authority exists rival governments" +
-                            " complete for control. Law Level refers to the government " +
-                            "nearest the starport. Examples include multiple governments " +
-                            "involved in a civil war. They could have an aversion to anything. ";
+                    Description += "Balkanisation: No central authority exists rival governments" +
+                            " complete for control Law Level refers to the government " +
+                            "nearest the starport Examples include multiple governments " +
+                            "involved in a civil war They could have an aversion to anything ";
                     break;
                 case 8:
-                    planetoid.Description += "Civil Service Bureaucracy: " +
+                    Description += "Civil Service Bureaucracy: " +
                             "Ruling functions are performed by government " +
-                            "agencies employing individuals selected for their expertise. " +
-                            "Examples include a technocracy or communism. They likely look " +
-                            "down on drugs and weapons. ";
+                            "agencies employing individuals selected for their expertise " +
+                            "Examples include a technocracy or communism They likely look " +
+                            "down on drugs and weapons ";
                     break;
                 case 9:
-                    planetoid.Description += "Impersonal Bureaucracy: " +
+                    Description += "Impersonal Bureaucracy: " +
                             "Ruling functions are performed by agencies " +
-                            "which have become insulated from the governed citizens. Examples " +
-                            "include entrenched castes of bureaucrats or a decaying empire. " +
+                            "which have become insulated from the governed citizens Examples " +
+                            "include entrenched castes of bureaucrats or a decaying empire " +
                             "They do like technology, weapons, drugs, Travellers, or " +
-                            "psionics typically. ";
+                            "psionics typically ";
                     break;
                 case 10:
-                    planetoid.Description += "Charismatic Dictator : " +
+                    Description += "Charismatic Dictator : " +
                             "Ruling functions are performed by agencies " +
                             "directed by a single leader who enjoys the overwhelming " +
-                            "confidence of the citizens. Examples include a revolutionary " +
-                            "leader, messiah, or emperor. Only the dictator can decide what " +
-                            "is illegal here. ";
+                            "confidence of the citizens Examples include a revolutionary " +
+                            "leader, messiah, or emperor Only the dictator can decide what " +
+                            "is illegal here ";
                     break;
                 case 11:
-                    planetoid.Description += "Non-charismatic Leader : A previous charismatic dictator" +
-                            " has been replaced by a leader through normal channels. Examples include" +
-                            " military dictatorship or hereditary kingship. They do not appreciate " +
-                            "weapons, technology, or computers from other lands. ";
+                    Description += "Non-charismatic Leader : A previous charismatic dictator" +
+                            " has been replaced by a leader through normal channels Examples include" +
+                            " military dictatorship or hereditary kingship They do not appreciate " +
+                            "weapons, technology, or computers from other lands ";
                     break;
                 case 12:
-                    planetoid.Description += "Charismatic oligarchy : Ruling functions are performed" +
+                    Description += "Charismatic oligarchy : Ruling functions are performed" +
                             " by a select group of members of an organisation or class which enjoys " +
-                            "the overwhelming confidence of the citizenry. Examples include junta, " +
-                            "or a revolutionary council. They tend not to appreciate weapons around them. ";
+                            "the overwhelming confidence of the citizenry Examples include junta, " +
+                            "or a revolutionary council They tend not to appreciate weapons around them ";
                     break;
                 default:
-                    planetoid.Govt = "Religious Dictatorship";
-                    planetoid.Description += "Ruling functions are " +
+                    Govt = "Religious Dictatorship";
+                    Description += "Ruling functions are " +
                             "performed by a religious organisation without regard to the specific " +
-                            "individual needs ot the citizenry. Examples include cults, transcendent" +
-                            " philosophy, or psionic group minds. Who is to say what they do or do " +
-                            "not want in their sectors. ";
+                            "individual needs ot the citizenry Examples include cults, transcendent" +
+                            " philosophy, or psionic group minds Who is to say what they do or do " +
+                            "not want in their sectors ";
                     break;
             }
-            if(factionGovRoll == planetoid.GovRoll){
-                planetoid.Description += "This is a splinter faction within the ruling government. ";
+            if(factionGovRoll == GovRoll){
+                Description += "This is a splinter faction within the ruling government ";
             }
             int factionStrengthRoll = rollDie(12,1);
-            planetoid.Description += "\n\nFaction strength: "+factionStrengthRoll+" - ";
+            Description += "\n\nFaction strength: "+factionStrengthRoll+" - ";
             if(factionStrengthRoll < 4){
-                planetoid.Description += "This faction is an obscure group. Few have heard of them " +
-                        "and they have no public support. ";
+                Description += "This faction is an obscure group Few have heard of them " +
+                        "and they have no public support ";
             }else if(factionStrengthRoll < 6){
-                planetoid.Description += "This is a fringe group. There are few supporters throughout" +
-                        " the populace. ";
+                Description += "This is a fringe group There are few supporters throughout" +
+                        " the populace ";
             }else if(factionStrengthRoll < 8){
-                planetoid.Description += "This is a minor group with some supporters among the populace. ";
+                Description += "This is a minor group with some supporters among the populace ";
             }else if(factionStrengthRoll < 10){
-                planetoid.Description += "This is a notable group here with a few significant and " +
-                        "well known members among its members, openly or otherwise. ";
+                Description += "This is a notable group here with a few significant and " +
+                        "well known members among its members, openly or otherwise ";
             }else if(factionStrengthRoll < 12){
-                planetoid.Description += "This faction is significant and could rival the primary government. ";
+                Description += "This faction is significant and could rival the primary government ";
             }else{
-                planetoid.Description += "This is an overwhelmingly popular faction, certainly with " +
-                        "more, if less than official, power than the primary government. ";
+                Description += "This is an overwhelmingly popular faction, certainly with " +
+                        "more, if less than official, power than the primary government ";
             }
         }
 
-        private void rollCulture(Planetoid planetoid){
-            planetoid.Description += "\n\n";
-            planetoid.CultureTensRoll = rollDie(6,1);
-            planetoid.CultureOnesRoll = rollDie(6,1);
+        private void rollCulture( ){
+            Description += "\n\n";
+            CultureTensRoll = rollDie(6,1);
+            CultureOnesRoll = rollDie(6,1);
             switch (CultureTensRoll){
                 case 1:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Sexist - one gender is considered subservient or inferior to the other. ";
+                            Description += "Sexist - one gender is considered subservient or inferior to the other ";
                             break;
                         case 2:
-                            planetoid.Description += "Religious - culture is heavily influenced by a religion or belief system, possibly one unique to this world. ";
+                            Description += "Religious - culture is heavily influenced by a religion or belief system, possibly one unique to this world ";
                             break;
                         case 3:
-                            planetoid.Description += "Artistic - art and culture are highly prized. Aesthetic design is important in all artifacts produced onworld. ";
+                            Description += "Artistic - art and culture are highly prized Aesthetic design is important in all artifacts produced onworld ";
                             break;
                         case 4:
-                            planetoid.Description += "Ritualised - social interaction and trade is highly formalised. Politeness and adherence to traditional forms is considered very important. ";
+                            Description += "Ritualised - social interaction and trade is highly formalised Politeness and adherence to traditional forms is considered very important ";
                             break;
                         case 5:
-                            planetoid.Description += "Conservative - the culture resists change and outside influences. ";
+                            Description += "Conservative - the culture resists change and outside influences ";
                             break;
                         case 6:
-                            planetoid.Description += "Xenophobic - the culture distrusts outsiders and alien influences. Offworlders will face considerable prejudice. ";
+                            Description += "Xenophobic - the culture distrusts outsiders and alien influences Offworlders will face considerable prejudice ";
                             break;
                     }
                     break;
                 case 2:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Taboo - a particular topic is forbidden and " +
-                                    "cannot be discussed. Characters who unwittingly mention this " +
-                                    "topic  will be ostracised. ";
+                            Description += "Taboo - a particular topic is forbidden and " +
+                                    "cannot be discussed Characters who unwittingly mention this " +
+                                    "topic  will be ostracised ";
                             break;
                         case 2:
-                            planetoid.Description += "Deceptive - trickery and equivocation are " +
-                                    "considered acceptable. Honesty is a sign of weakness. ";
+                            Description += "Deceptive - trickery and equivocation are " +
+                                    "considered acceptable Honesty is a sign of weakness ";
                             break;
                         case 3:
-                            planetoid.Description += "Liberal - the culture welcomes change and " +
-                                    "offworld influence. Characters who bring new and strange ideas " +
-                                    "will be welcomed. ";
+                            Description += "Liberal - the culture welcomes change and " +
+                                    "offworld influence Characters who bring new and strange ideas " +
+                                    "will be welcomed ";
                             break;
                         case 4:
-                            planetoid.Description += "Honourable - one's word is one's bond in the " +
-                                    "culture. Lying is both rare and despised. ";
+                            Description += "Honourable - one's word is one's bond in the " +
+                                    "culture Lying is both rare and despised ";
                             break;
                         case 5:
-                            planetoid.Description += "Influenced - the cultrue is heavily influenced" +
-                                    " by another, neighbouring world. If you have the details for " +
+                            Description += "Influenced - the cultrue is heavily influenced" +
+                                    " by another, neighbouring world If you have the details for " +
                                     "the neighbouring world, choose a cultural quirk that this world" +
-                                    " has adopted. If not roll for one. ";
-                            //TODO: If adjacent to another planet, use their major culture.
+                                    " has adopted If not roll for one ";
+                            //TODO: If adjacent to another planet, use their major culture
                             break;
                         case 6:
-                            planetoid.Description += "Fusion - the culture is heavily influenced by " +
-                                    "another, neighbouring world. If  you have the details for the " +
+                            Description += "Fusion - the culture is heavily influenced by " +
+                                    "another, neighbouring world If  you have the details for the " +
                                     "neighbouring world, choose a cultural quick that this world has " +
-                                    "adopted. If not, roll for one. ";
+                                    "adopted If not, roll for one ";
                             //TODO: Neighbor detection or roll again?
                             break;
                     }
@@ -820,167 +889,167 @@ public class MainActivity extends AppCompatActivity {
                 case 3:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Barbaric - physical strength and combat prowess" +
-                                    " are highly valued in the culture. Characters may be challenged " +
+                            Description += "Barbaric - physical strength and combat prowess" +
+                                    " are highly valued in the culture Characters may be challenged " +
                                     "to a fight, or dismissed if they seem incapable of defending " +
-                                    "themselves. Sports tend towards bloody and violent. ";
+                                    "themselves Sports tend towards bloody and violent ";
                             break;
                         case 2:
-                            planetoid.Description += "Remnant - the culture is surviving remnant of " +
-                                    "a once-great and vibrant civilisation, clinging to its former glory. The world " +
+                            Description += "Remnant - the culture is surviving remnant of " +
+                                    "a once-great and vibrant civilisation, clinging to its former glory The world " +
                                     "is filled with crumbling ruins, and every story revolves around " +
-                                    "the good old days. ";
+                                    "the good old days ";
                             break;
                         case 3:
-                            planetoid.Description += "Degenerate – the culture is falling apart and is on the brink of " +
-                                    "war or economic collapse. Violent protests are common and " +
-                                    "the social order is decaying. ";
+                            Description += "Degenerate – the culture is falling apart and is on the brink of " +
+                                    "war or economic collapse Violent protests are common and " +
+                                    "the social order is decaying ";
                             break;
                         case 4:
-                            planetoid.Description += "Progressive – the culture is expanding and vibrant. Fortunes" +
-                                    " are being made in trade; science is forging bravely ahead. ";
+                            Description += "Progressive – the culture is expanding and vibrant Fortunes" +
+                                    " are being made in trade; science is forging bravely ahead ";
                             break;
                         case 5:
-                            planetoid.Description += "Recovering – a recent trauma, such as a plague, war, disaster or " +
-                                    "despotic regime has left scars on the culture. ";
+                            Description += "Recovering – a recent trauma, such as a plague, war, disaster or " +
+                                    "despotic regime has left scars on the culture ";
                             break;
                         case 6:
-                            planetoid.Description += "Nexus – members of many different cultures and species visit " +
-                                    "here. ";
+                            Description += "Nexus – members of many different cultures and species visit " +
+                                    "here ";
                             break;
                     }
                     break;
                 case 4:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Tourist Attraction – some aspect of the culture or the planet " +
-                                    "draws visitors from all over charted space. ";
+                            Description += "Tourist Attraction – some aspect of the culture or the planet " +
+                                    "draws visitors from all over charted space ";
                             break;
                         case 2:
-                            planetoid.Description += "Violent – physical conflict is common, taking the form of duels, " +
-                                    "brawls or other contests. Trial by combat is a part of their " +
-                                    "judicial system. ";
+                            Description += "Violent – physical conflict is common, taking the form of duels, " +
+                                    "brawls or other contests Trial by combat is a part of their " +
+                                    "judicial system ";
                             break;
                         case 3:
-                            planetoid.Description += "Peaceful – physical conflict is almost unheard-of. The culture " +
-                                    "produces few soldiers and diplomacy reigns supreme. Forceful " +
-                                    "characters will be ostracised. ";
+                            Description += "Peaceful – physical conflict is almost unheard-of The culture " +
+                                    "produces few soldiers and diplomacy reigns supreme Forceful " +
+                                    "characters will be ostracised ";
                             break;
                         case 4:
-                            planetoid.Description += "Obsessed – everyone is obsessed with or addicted to a " +
-                                    "substance, personality, act or item. This monomania pervades " +
-                                    "every aspect of the culture. ";
+                            Description += "Obsessed – everyone is obsessed with or addicted to a " +
+                                    "substance, personality, act or item This monomania pervades " +
+                                    "every aspect of the culture ";
                             break;
                         case 5:
-                            planetoid.Description += "Fashion – fi ne clothing and decoration are considered vitally " +
-                                    "important in the culture. Underdressed characters have no " +
-                                    "standing here. ";
+                            Description += "Fashion – fi ne clothing and decoration are considered vitally " +
+                                    "important in the culture Underdressed characters have no " +
+                                    "standing here ";
                             break;
                         case 6:
-                            planetoid.Description += "At war – the culture is at war, either with another planet or " +
-                                    "polity, or is troubled by terrorists or rebels. ";
+                            Description += "At war – the culture is at war, either with another planet or " +
+                                    "polity, or is troubled by terrorists or rebels ";
                             break;
                     }
                     break;
                 case 5:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Unusual Custom: Offworlders – space travellers hold a unique " +
+                            Description += "Unusual Custom: Offworlders – space travellers hold a unique " +
                                     "position in the culture’s mythology or beliefs, and travellers will " +
-                                    "be expected to live up to these myths. ";
+                                    "be expected to live up to these myths ";
                             break;
                         case 2:
-                            planetoid.Description += "Unusual Custom: Starport – the planet’s starport is more than " +
+                            Description += "Unusual Custom: Starport – the planet’s starport is more than " +
                                     "a commercial centre; it might be a religious temple, or be seen " +
-                                    "as highly controversial and surrounded by protestors. ";
+                                    "as highly controversial and surrounded by protestors ";
                             break;
                         case 3:
-                            planetoid.Description += "Unusual Custom: Media – news agencies and " +
-                                    "telecommunications channels are especially strange here. " +
-                                    "Getting accurate information may be difficult. ";
+                            Description += "Unusual Custom: Media – news agencies and " +
+                                    "telecommunications channels are especially strange here " +
+                                    "Getting accurate information may be difficult ";
                             break;
                         case 4:
-                            planetoid.Description += "Unusual Customs: Technology – the culture interacts with " +
-                                    "technology in an unusual way. Telecommunications might " +
+                            Description += "Unusual Customs: Technology – the culture interacts with " +
+                                    "technology in an unusual way Telecommunications might " +
                                     "be banned, robots might have civil rights, cyborgs might be " +
-                                    "property. ";
+                                    "property ";
                             break;
                         case 5:
-                            planetoid.Description += "Unusual Customs: Lifecycle – there might be a mandatory age " +
-                                    "of termination, or anagathics might be widely used. Family " +
+                            Description += "Unusual Customs: Lifecycle – there might be a mandatory age " +
+                                    "of termination, or anagathics might be widely used Family " +
                                     "units might be different, with children being raised by the state " +
-                                    "or banned in favour of cloning. ";
+                                    "or banned in favour of cloning ";
                             break;
                         case 6:
-                            planetoid.Description += "Unusual Customs: Social Standings – the culture has a distinct " +
-                                    "caste system. Characters of a low social standing who do not " +
-                                    "behave appropriately will face punishment. ";
+                            Description += "Unusual Customs: Social Standings – the culture has a distinct " +
+                                    "caste system Characters of a low social standing who do not " +
+                                    "behave appropriately will face punishment ";
                             break;
                     }
                     break;
                 case 6:
                     switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += "Unusual Customs: Trade – the culture has an odd attitude " +
+                            Description += "Unusual Customs: Trade – the culture has an odd attitude " +
                                     "towards some aspect of commerce, which may interfere with " +
-                                    "trade at the spaceport. For example, merchants might expect " +
+                                    "trade at the spaceport For example, merchants might expect " +
                                     "a gift as part of a deal, or some goods may only be handled by " +
-                                    "certain families. ";
+                                    "certain families ";
                             break;
                         case 2:
-                            planetoid.Description += "Unusual Customs: Nobility – those of high social standing " +
+                            Description += "Unusual Customs: Nobility – those of high social standing " +
                                     "have a strange custom associated with them; perhaps nobles " +
                                     "are blinded, or must live in gilded cages, or only serve for a " +
-                                    "single year before being exiled. ";
+                                    "single year before being exiled ";
                             break;
                         case 3:
-                            planetoid.Description += "Unusual Customs: Sex – the culture has an unusual attitude " +
-                                    "towards intercourse and reproduction. Perhaps cloning is used " +
-                                    "instead, or sex is used to seal commercial deals. ";
+                            Description += "Unusual Customs: Sex – the culture has an unusual attitude " +
+                                    "towards intercourse and reproduction Perhaps cloning is used " +
+                                    "instead, or sex is used to seal commercial deals ";
                             break;
                         case 4:
-                            planetoid.Description += "Unusual Customs: Eating – food and drink occupies an " +
-                                    "unusual place in the culture. Perhaps eating is a private affair, " +
+                            Description += "Unusual Customs: Eating – food and drink occupies an " +
+                                    "unusual place in the culture Perhaps eating is a private affair, " +
                                     "or banquets and formal dinners are seen as the highest form " +
-                                    "of politeness. ";
+                                    "of politeness ";
                             break;
                         case 5:
-                            planetoid.Description += "Unusual Customs: Travel – travellers may be distrusted or " +
+                            Description += "Unusual Customs: Travel – travellers may be distrusted or " +
                                     "feted, or perhaps the culture frowns on those who leave their " +
-                                    "homes. ";
+                                    "homes ";
                             break;
                         case 6:
-                            planetoid.Description += "Unusual Custom: Conspiracy – something strange is going " +
-                                    "on. The government is being subverted by another group or " +
-                                    "agency. ";
+                            Description += "Unusual Custom: Conspiracy – something strange is going " +
+                                    "on The government is being subverted by another group or " +
+                                    "agency ";
                             break;
                     }
                     break;
             }
         }
 
-        private void createPlanetLaw(Planetoid planetoid){
+        private void createPlanetLaw( ){
             Log.d(TAG, "createPlanetLaw Called!");
-            if(planetoid.PopRoll == 0){
-                planetoid.Description += "";
+            if(PopRoll == 0){
+                LawRoll = 0;
             }else{
-                planetoid.LawRoll = rollDie(5,-5) + planetoid.GovRoll;
-                planetoid.Name += planetoid.LawRoll;
-                Log.d(TAG, "Law Roll: "+planetoid.LawRoll);
-                if(planetoid.LawRoll<=0){
-                    planetoid.Description += "There are no legal restrictions here. ";
+                LawRoll = rollDie(5,-5) + GovRoll;
+                Log.d(TAG, "Law Roll: "+LawRoll);
+                if(LawRoll<=0){
+                    LawRoll = 0;
+                    Description += "There are no legal restrictions here ";
                 }
+                Name += LawRoll;
             }
         }
 
-        private void createPlanetTech(Planetoid planetoid){
+        private void createPlanetTech( ){
             Log.d(TAG, "createPlanetTech Called!");
-            if(planetoid.PopRoll == 0){
-                planetoid.Tech = "None";
-                planetoid.Description += "";
+            if(PopRoll == 0){
+                Tech = 0;
             }else{
                 dieRoll = rollDie(6,1);
-                switch (planetoid.Starport){
+                switch (Starport){
                     case "A":
                         dieRoll += 6;
                         break;
@@ -997,25 +1066,25 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Starport is not ABCX");
                         break;
                 }
-                if(planetoid.SizeRoll < 2){
+                if(SizeRoll < 2){
                     dieRoll += 2;
-                }else if(planetoid.SizeRoll < 5){
+                }else if(SizeRoll < 5){
                     dieRoll += 1;
                 }else{
                     Log.d(TAG, "Size Roll was greater than 4");
                 }
-                if(planetoid.AtmoRoll<4||planetoid.AtmoRoll>9){
+                if(AtmoRoll<4||AtmoRoll>9){
                     dieRoll += 1;
                 }
-                if(planetoid.HydroRoll <= 0||planetoid.HydroRoll == 9){
+                if(HydroRoll <= 0||HydroRoll == 9){
                     dieRoll += 1;
-                }else if(planetoid.HydroRoll == 10){
+                }else if(HydroRoll == 10){
                     dieRoll += 2;
                 }
-                if((planetoid.PopRoll>0&&planetoid.PopRoll<6)||planetoid.PopRoll == 9){
+                if((PopRoll>0&&PopRoll<6)||PopRoll == 9){
                     dieRoll += 1;
-                }else if(planetoid.PopRoll > 9){
-                    switch (planetoid.PopRoll){
+                }else if(PopRoll > 9){
+                    switch (PopRoll){
                         case 10:
                             dieRoll += 2;
                             break;
@@ -1027,38 +1096,39 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                 }
-                if(planetoid.GovRoll == 0 || planetoid.GovRoll == 5){
+                if(GovRoll == 0 || GovRoll == 5){
                     dieRoll += 1;
-                }else if(planetoid.GovRoll == 7){
+                }else if(GovRoll == 7){
                     dieRoll += 2;
-                }else if(planetoid.GovRoll == 13||planetoid.GovRoll == 14){
+                }else if(GovRoll == 13||GovRoll == 14){
                     dieRoll -= 2;
                 }
                 Log.d(TAG, "Die Roll after first Tech mods: "+dieRoll);
 
                 //Minimum Tech levels for certain atmos
                 if(dieRoll<11){
-                    if(planetoid.AtmoRoll == 12){
+                    if(AtmoRoll == 12){
                         dieRoll = 10;
-                    }else if(dieRoll < 9 &&planetoid.AtmoRoll == 11){
+                    }else if(dieRoll < 9 &&AtmoRoll == 11){
                         dieRoll = 9;
                     }else if(dieRoll < 8 &&
-                            (planetoid.AtmoRoll < 2||
-                                    planetoid.AtmoRoll == 10||
-                                    planetoid.AtmoRoll == 15)){
+                            (AtmoRoll < 2||
+                                    AtmoRoll == 10||
+                                    AtmoRoll == 15)){
                             dieRoll = 8;
-                    }else if(dieRoll<5 &&planetoid.AtmoRoll < 4){
+                    }else if(dieRoll<5 &&AtmoRoll < 4){
                         dieRoll = 5;
                     }
                     else if(dieRoll < 3 &&
-                            (planetoid.AtmoRoll == 4||
-                                    planetoid.AtmoRoll == 7||
-                                    planetoid.AtmoRoll == 9)){
+                            (AtmoRoll == 4||
+                                    AtmoRoll == 7||
+                                    AtmoRoll == 9)){
                         dieRoll = 3;
                     }
                 }
 
-                planetoid.Tech += dieRoll;
+                Tech = dieRoll;
+                Name += "-"+Tech;
             }
         }
     }
