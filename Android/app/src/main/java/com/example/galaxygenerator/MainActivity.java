@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         private int AtmoRoll;
         private int PopRoll;
         private int GovRoll;
+        private int CultureTensRoll;
+        private int CultureOnesRoll;
         private int LawRoll;
         private String printOut;
 
@@ -777,70 +779,109 @@ public class MainActivity extends AppCompatActivity {
                             //TODO: If adjacent to another planet, use their major culture.
                             break;
                         case 6:
+                            planetoid.Description += "Fusion - the culture is heavily influenced by " +
+                                    "another, neighbouring world. If  you have the details for the " +
+                                    "neighbouring world, choose a cultural quick that this world has " +
+                                    "adopted. If not, roll for one. ";
+                            //TODO: Neighbor detection or roll again?
                             break;
                     }
                     break;
                 case 3:
                     switch(dieRoll){
                         case 1:
+                            planetoid.Description += "Barbaric - physical strength and combat prowess" +
+                                    " are highly valued in the culture. Characters may be challenged " +
+                                    "to a fight, or dismissed if they seem incapable of defending " +
+                                    "themselves. Sports tend towards bloody and violent. ";
                             break;
                         case 2:
+                            planetoid.Description += "Remnant - the culture is surviving remnant of " +
+                                    "a once-great and vibrant civilisation, clinging to its former glory. The world " +
+                                    "is filled with crumbling ruins, and every story revolves around " +
+                                    "the good old days. ";
                             break;
                         case 3:
+                            planetoid.Description += "Degenerate – the culture is falling apart and is on the brink of " +
+                                    "war or economic collapse. Violent protests are common and " +
+                                    "the social order is decaying. ";
                             break;
                         case 4:
+                            planetoid.Description += "Progressive – the culture is expanding and vibrant. Fortunes" +
+                                    " are being made in trade; science is forging bravely ahead. ";
                             break;
                         case 5:
+                            planetoid.Description += "Recovering – a recent trauma, such as a plague, war, disaster or " +
+                                    "despotic regime has left scars on the culture. ";
                             break;
                         case 6:
+                            planetoid.Description += " ";
                             break;
                     }
                     break;
                 case 4:
                     switch(dieRoll){
                         case 1:
+                            planetoid.Description += " ";
                             break;
                         case 2:
+                            planetoid.Description += " ";
                             break;
                         case 3:
+                            planetoid.Description += " ";
                             break;
                         case 4:
+                            planetoid.Description += " ";
                             break;
                         case 5:
+                            planetoid.Description += " ";
                             break;
                         case 6:
+                            planetoid.Description += " ";
                             break;
                     }
                     break;
                 case 5:
                     switch(dieRoll){
                         case 1:
+                            planetoid.Description += " ";
                             break;
                         case 2:
+                            planetoid.Description += " ";
                             break;
                         case 3:
+                            planetoid.Description += " ";
                             break;
                         case 4:
+                            planetoid.Description += " ";
                             break;
                         case 5:
+                            planetoid.Description += " ";
                             break;
                         case 6:
+                            planetoid.Description += " ";
                             break;
                     }
                     break;
                 case 6:
                     switch(dieRoll){
                         case 1:
+                            planetoid.Description += " ";
                             break;
                         case 2:
+                            planetoid.Description += " ";
                             break;
                         case 3:
+                            planetoid.Description += " ";
                             break;
                         case 4:
+                            planetoid.Description += " ";
                             break;
                         case 5:
+                            planetoid.Description += " ";
                             break;
                         case 6:
+                            planetoid.Description += " ";
                             break;
                     }
                     break;
