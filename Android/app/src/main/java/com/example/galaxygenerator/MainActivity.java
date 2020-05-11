@@ -85,11 +85,13 @@ public class MainActivity extends AppCompatActivity {
         private String SurvivalGearReq;
         private int SizeRoll;
         private int AtmoRoll;
+        private int HydroRoll;
         private int PopRoll;
         private int GovRoll;
         private int CultureTensRoll;
         private int CultureOnesRoll;
         private int LawRoll;
+        private int StarportRoll;
         private String printOut;
 
         private Planetoid(){
@@ -109,8 +111,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void createStarport(Planetoid planetoid){
-            dieRoll = rollDie(6, 2);
-            planetoid.Name = ""+dieRoll;
+            planetoid.StarportRoll = rollDie(6, 2);
+            if(planetoid.StarportRoll <= 2){
+                planetoid.Starport = "X";
+            }else if(planetoid.StarportRoll <5){
+                planetoid.Starport = "E";
+            }else if(planetoid.StarportRoll<7){
+                planetoid.Starport = "D";
+            }else if(planetoid.StarportRoll<9){
+                planetoid.Starport = "C";
+            }else if(planetoid.StarportRoll<11){
+                planetoid.Starport = "B";
+            }else{
+                planetoid.Starport = "A";
+            }
+            planetoid.Name += planetoid.Starport;
         }
 
         private void createPlanetSize(Planetoid planetoid){
@@ -345,70 +360,73 @@ public class MainActivity extends AppCompatActivity {
 
         private void createPlanetHydro(Planetoid planetoid){
             Log.d(TAG, "createPlanetHydro Called!");
-            //2d6-7+Size
-            dieRoll = rollDie(5,-5) + planetoid.SizeRoll;
-            Log.d(TAG, "Die Roll in Hydro: "+dieRoll);
             if(planetoid.SizeRoll<2){
+                Log.d(TAG, "Planetoid to small for water!");
                 planetoid.Hydro = "0";
-            }
-            if(planetoid.AtmoRoll == 0||planetoid.AtmoRoll == 1||(planetoid.AtmoRoll>9&&planetoid.AtmoRoll<13)){
-                dieRoll -=4;
-            }
-            if(planetoid.Temp.contains("Hot")){
-                dieRoll -= 2;
-            }else if(planetoid.Temp.contains("Roasting")){
-                dieRoll -= 6;
-            }
-
-            if(dieRoll<1){
-                planetoid.Name += "0";
-                planetoid.Hydro = "0-5%";
-                planetoid.Description += "Desert world. ";
-            }else if(dieRoll>10){
-                planetoid.Name += "A";
-                planetoid.Hydro = "96-100%";
-                planetoid.Description += "Almost entirely water. ";
+                HydroRoll = 0;
             }else{
-                planetoid.Name += dieRoll;
-                switch (dieRoll){
-                    case 1:
-                        planetoid.Hydro = "6-15%";
-                        planetoid.Description += "Dry world. ";
-                        break;
-                    case 2:
-                        planetoid.Hydro = "16-25%";
-                        planetoid.Description += "A few small seas. ";
-                        break;
-                    case 3:
-                        planetoid.Hydro = "26-35%";
-                        planetoid.Description += "Small seas and oceans. ";
-                        break;
-                    case 4:
-                        planetoid.Hydro = "36-45%";
-                        planetoid.Description += "Wet world. ";
-                        break;
-                    case 5:
-                        planetoid.Hydro = "46-55%";
-                        planetoid.Description += "Large oceans. ";
-                        break;
-                    case 6:
-                        planetoid.Hydro = "56-65%";
-                        break;
-                    case 7:
-                        planetoid.Hydro = "66-75%";
-                        planetoid.Description += "Earthlike amount of water. ";
-                        break;
-                    case 8:
-                        planetoid.Hydro = "76-85%";
-                        planetoid.Description += "Water world. ";
-                        break;
-                    case 9:
-                        planetoid.Hydro = "86-95%";
-                        planetoid.Description += "Only a few small islands and archipelagos. ";
-                        break;
-                    default:
-                        Log.e(TAG, "Something went wrong in the Hydro Switch.");
-                        break;
+                //2d6-7+Size
+                HydroRoll = rollDie(5,-5) + planetoid.SizeRoll;
+                Log.d(TAG, "Die Roll in Hydro: "+dieRoll);
+                if(planetoid.AtmoRoll == 0||planetoid.AtmoRoll == 1||(planetoid.AtmoRoll>9&&planetoid.AtmoRoll<13)){
+                    HydroRoll -=4;
+                }
+                if(planetoid.Temp.contains("Hot")){
+                    HydroRoll -= 2;
+                }else if(planetoid.Temp.contains("Roasting")){
+                    HydroRoll -= 6;
+                }
+
+                if(HydroRoll<1){
+                    planetoid.Name += "0";
+                    planetoid.Hydro = "0-5%";
+                    planetoid.Description += "Desert world. ";
+                }else if(HydroRoll>10){
+                    planetoid.Name += "A";
+                    planetoid.Hydro = "96-100%";
+                    planetoid.Description += "Almost entirely water. ";
+                }else{
+                    planetoid.Name += HydroRoll;
+                    switch (HydroRoll){
+                        case 1:
+                            planetoid.Hydro = "6-15%";
+                            planetoid.Description += "Dry world. ";
+                            break;
+                        case 2:
+                            planetoid.Hydro = "16-25%";
+                            planetoid.Description += "A few small seas. ";
+                            break;
+                        case 3:
+                            planetoid.Hydro = "26-35%";
+                            planetoid.Description += "Small seas and oceans. ";
+                            break;
+                        case 4:
+                            planetoid.Hydro = "36-45%";
+                            planetoid.Description += "Wet world. ";
+                            break;
+                        case 5:
+                            planetoid.Hydro = "46-55%";
+                            planetoid.Description += "Large oceans. ";
+                            break;
+                        case 6:
+                            planetoid.Hydro = "56-65%";
+                            break;
+                        case 7:
+                            planetoid.Hydro = "66-75%";
+                            planetoid.Description += "Earthlike amount of water. ";
+                            break;
+                        case 8:
+                            planetoid.Hydro = "76-85%";
+                            planetoid.Description += "Water world. ";
+                            break;
+                        case 9:
+                            planetoid.Hydro = "86-95%";
+                            planetoid.Description += "Only a few small islands and archipelagos. ";
+                            break;
+                        default:
+                            Log.e(TAG, "Something went wrong in the Hydro Switch.");
+                            break;
+                    }
                 }
             }
         }
@@ -961,9 +979,87 @@ public class MainActivity extends AppCompatActivity {
                 planetoid.Tech = "None";
                 planetoid.Description += "";
             }else{
+                dieRoll = rollDie(6,1);
+                switch (planetoid.Starport){
+                    case "A":
+                        dieRoll += 6;
+                        break;
+                    case "B":
+                        dieRoll += 4;
+                        break;
+                    case "C":
+                        dieRoll += 2;
+                        break;
+                    case "X":
+                        dieRoll -= 4;
+                        break;
+                    default:
+                        Log.d(TAG, "Starport is not ABCX");
+                        break;
+                }
+                if(planetoid.SizeRoll < 2){
+                    dieRoll += 2;
+                }else if(planetoid.SizeRoll < 5){
+                    dieRoll += 1;
+                }else{
+                    Log.d(TAG, "Size Roll was greater than 4");
+                }
+                if(planetoid.AtmoRoll<4||planetoid.AtmoRoll>9){
+                    dieRoll += 1;
+                }
+                if(planetoid.HydroRoll <= 0||planetoid.HydroRoll == 9){
+                    dieRoll += 1;
+                }else if(planetoid.HydroRoll == 10){
+                    dieRoll += 2;
+                }
+                if((planetoid.PopRoll>0&&planetoid.PopRoll<6)||planetoid.PopRoll == 9){
+                    dieRoll += 1;
+                }else if(planetoid.PopRoll > 9){
+                    switch (planetoid.PopRoll){
+                        case 10:
+                            dieRoll += 2;
+                            break;
+                        case 11:
+                            dieRoll += 3;
+                            break;
+                        case 12:
+                            dieRoll += 4;
+                            break;
+                    }
+                }
+                if(planetoid.GovRoll == 0 || planetoid.GovRoll == 5){
+                    dieRoll += 1;
+                }else if(planetoid.GovRoll == 7){
+                    dieRoll += 2;
+                }else if(planetoid.GovRoll == 13||planetoid.GovRoll == 14){
+                    dieRoll -= 2;
+                }
+                Log.d(TAG, "Die Roll after first Tech mods: "+dieRoll);
 
+                //Minimum Tech levels for certain atmos
+                if(dieRoll<11){
+                    if(planetoid.AtmoRoll == 12){
+                        dieRoll = 10;
+                    }else if(dieRoll < 9 &&planetoid.AtmoRoll == 11){
+                        dieRoll = 9;
+                    }else if(dieRoll < 8 &&
+                            (planetoid.AtmoRoll < 2||
+                                    planetoid.AtmoRoll == 10||
+                                    planetoid.AtmoRoll == 15)){
+                            dieRoll = 8;
+                    }else if(dieRoll<5 &&planetoid.AtmoRoll < 4){
+                        dieRoll = 5;
+                    }
+                    else if(dieRoll < 3 &&
+                            (planetoid.AtmoRoll == 4||
+                                    planetoid.AtmoRoll == 7||
+                                    planetoid.AtmoRoll == 9)){
+                        dieRoll = 3;
+                    }
+                }
+
+                planetoid.Tech += dieRoll;
             }
-
         }
     }
 }
