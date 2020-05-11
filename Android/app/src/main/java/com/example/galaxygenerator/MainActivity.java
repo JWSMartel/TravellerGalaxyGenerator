@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         makePlanetBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                final Planetoid newPlanet = new Planetoid();
+                Planetoid newPlanet = new Planetoid();
                 Log.d(TAG, "Make Planet clicked!");
                 output.setText(newPlanet.printOut);
             }
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public int rollDie(int max, int min){
         if(min>=max){
+            Log.e(TAG, "Min is greater than max!!");
             return 10000;
         }
         return (int) (Math.random()*((max-min)+1))+min;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         private String Hydro;
         private String Pop;
         private String Govt;
-        private String Law;
+        //private String Law;
         private String Starport;
         private String Tech;
         private String Bases;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             createPlanetTech(this);
             Log.d(TAG, Name);
             printOut = NAME+Name+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+
-                    Temp+HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+Law+TECHLV+Tech+Description;
+                    Temp+HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+LawRoll+TECHLV+Tech+Description;
         }
 
         private void createStarport(Planetoid planetoid){
@@ -346,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "createPlanetHydro Called!");
             //2d6-7+Size
             dieRoll = rollDie(5,-5) + planetoid.SizeRoll;
+            Log.d(TAG, "Die Roll in Hydro: "+dieRoll);
             if(planetoid.SizeRoll<2){
                 planetoid.Hydro = "0";
             }
@@ -413,7 +415,8 @@ public class MainActivity extends AppCompatActivity {
 
         private void createPlanetPop(Planetoid planetoid){
             Log.d(TAG, "createPlanetPop Called!");
-            planetoid.PopRoll = rollDie(0,10);
+            planetoid.PopRoll = rollDie(10,0);
+            Log.d(TAG, "Pop Roll: "+planetoid.PopRoll);
             if(planetoid.PopRoll == 10){
                 planetoid.Name += "A";
                 Pop = "Tens of billions";
@@ -484,6 +487,15 @@ public class MainActivity extends AppCompatActivity {
                     planetoid.Description += "No government structure. In many cases, family bonds" +
                             "predominate. Examples include a Family, Clan, or total Anarchy. Little" +
                             " could be considered illegal here. ";
+                    planetoid.Name += "0";
+                }else if(planetoid.GovRoll >= 13){
+                    planetoid.Govt = "Religious Dictatorship";
+                    planetoid.Description += "Ruling functions are " +
+                            "performed by a religious organisation without regard to the specific " +
+                            "individual needs of the citizenry. Examples include cults, transcendent" +
+                            " philosophy, or psionic group minds. Who is to say what they do or do " +
+                            "not want in their sectors. ";
+                    planetoid.Name += "D";
                 }else{
                     switch (planetoid.GovRoll){
                         case 1:
@@ -558,6 +570,7 @@ public class MainActivity extends AppCompatActivity {
                                     "confidence of the citizens. Examples include a revolutionary " +
                                     "leader, messiah, or emperor. Only the dictator can decide what " +
                                     "is illegal here. ";
+                            planetoid.Name += "A";
                             break;
                         case 11:
                             planetoid.Govt = "Non-charismatic Leader";
@@ -565,6 +578,7 @@ public class MainActivity extends AppCompatActivity {
                                     "has been replaced by a leader through normal channels. Examples include" +
                                     " military dictatorship or hereditary kingship. They do not appreciate " +
                                     "weapons, technology, or computers from other lands. ";
+                            planetoid.Name += "B";
                             break;
                         case 12:
                             planetoid.Govt = "Charismatic Oligarchy";
@@ -572,15 +586,13 @@ public class MainActivity extends AppCompatActivity {
                                     " by a select group of members of an organisation or class which enjoys " +
                                     "the overwhelming confidence of the citizenry. Examples include junta, " +
                                     "or a revolutionary council. They tend not to appreciate weapons around them. ";
+                            planetoid.Name += "C";
                             break;
                         default:
-                            planetoid.Govt = "Religious Dictatorship";
-                            planetoid.Description += "Ruling functions are " +
-                                    "performed by a religious organisation without regard to the specific " +
-                                    "individual needs ot the citizenry. Examples include cults, transcendent" +
-                                    " philosophy, or psionic group minds. Who is to say what they do or do " +
-                                    "not want in their sectors. ";
-                            break;
+                            Log.e(TAG, "Something went wrong in Primary Gov Assign Switch");
+                    }
+                    if(planetoid.GovRoll<10){
+                        planetoid.Name += planetoid.GovRoll;
                     }
                     rollCulture(planetoid);
 
@@ -932,11 +944,14 @@ public class MainActivity extends AppCompatActivity {
         private void createPlanetLaw(Planetoid planetoid){
             Log.d(TAG, "createPlanetLaw Called!");
             if(planetoid.PopRoll == 0){
-                planetoid.Law = "None";
-                planetoid.Description += "\n";
+                planetoid.Description += "";
             }else{
-                //2d6-7+GovRoll
-                dieRoll = rollDie(5,-5) + GovRoll;
+                planetoid.LawRoll = rollDie(5,-5) + planetoid.GovRoll;
+                planetoid.Name += planetoid.LawRoll;
+                Log.d(TAG, "Law Roll: "+planetoid.LawRoll);
+                if(planetoid.LawRoll<=0){
+                    planetoid.Description += "There are no legal restrictions here. ";
+                }
             }
         }
 
@@ -944,7 +959,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "createPlanetTech Called!");
             if(planetoid.PopRoll == 0){
                 planetoid.Tech = "None";
-                planetoid.Description += "\n";
+                planetoid.Description += "";
             }else{
 
             }
