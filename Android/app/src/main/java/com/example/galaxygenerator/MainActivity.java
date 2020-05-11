@@ -726,11 +726,11 @@ public class MainActivity extends AppCompatActivity {
 
         private void rollCulture(Planetoid planetoid){
             planetoid.Description += "\n\n";
-            int tensDie = rollDie(6,1);
-            dieRoll = rollDie(6,1);
-            switch (tensDie){
+            planetoid.CultureTensRoll = rollDie(6,1);
+            planetoid.CultureOnesRoll = rollDie(6,1);
+            switch (CultureTensRoll){
                 case 1:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
                             planetoid.Description += "Sexist - one gender is considered subservient or inferior to the other. ";
                             break;
@@ -752,7 +752,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
                             planetoid.Description += "Taboo - a particular topic is forbidden and " +
                                     "cannot be discussed. Characters who unwittingly mention this " +
@@ -788,7 +788,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 3:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
                             planetoid.Description += "Barbaric - physical strength and combat prowess" +
                                     " are highly valued in the culture. Characters may be challenged " +
@@ -815,73 +815,114 @@ public class MainActivity extends AppCompatActivity {
                                     "despotic regime has left scars on the culture. ";
                             break;
                         case 6:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Nexus – members of many different cultures and species visit " +
+                                    "here. ";
                             break;
                     }
                     break;
                 case 4:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Tourist Attraction – some aspect of the culture or the planet " +
+                                    "draws visitors from all over charted space. ";
                             break;
                         case 2:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Violent – physical conflict is common, taking the form of duels, " +
+                                    "brawls or other contests. Trial by combat is a part of their " +
+                                    "judicial system. ";
                             break;
                         case 3:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Peaceful – physical conflict is almost unheard-of. The culture " +
+                                    "produces few soldiers and diplomacy reigns supreme. Forceful " +
+                                    "characters will be ostracised. ";
                             break;
                         case 4:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Obsessed – everyone is obsessed with or addicted to a " +
+                                    "substance, personality, act or item. This monomania pervades " +
+                                    "every aspect of the culture. ";
                             break;
                         case 5:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Fashion – fi ne clothing and decoration are considered vitally " +
+                                    "important in the culture. Underdressed characters have no " +
+                                    "standing here. ";
                             break;
                         case 6:
-                            planetoid.Description += " ";
+                            planetoid.Description += "At war – the culture is at war, either with another planet or " +
+                                    "polity, or is troubled by terrorists or rebels. ";
                             break;
                     }
                     break;
                 case 5:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Custom: Offworlders – space travellers hold a unique " +
+                                    "position in the culture’s mythology or beliefs, and travellers will " +
+                                    "be expected to live up to these myths. ";
                             break;
                         case 2:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Custom: Starport – the planet’s starport is more than " +
+                                    "a commercial centre; it might be a religious temple, or be seen " +
+                                    "as highly controversial and surrounded by protestors. ";
                             break;
                         case 3:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Custom: Media – news agencies and " +
+                                    "telecommunications channels are especially strange here. " +
+                                    "Getting accurate information may be difficult. ";
                             break;
                         case 4:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Technology – the culture interacts with " +
+                                    "technology in an unusual way. Telecommunications might " +
+                                    "be banned, robots might have civil rights, cyborgs might be " +
+                                    "property. ";
                             break;
                         case 5:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Lifecycle – there might be a mandatory age " +
+                                    "of termination, or anagathics might be widely used. Family " +
+                                    "units might be different, with children being raised by the state " +
+                                    "or banned in favour of cloning. ";
                             break;
                         case 6:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Social Standings – the culture has a distinct " +
+                                    "caste system. Characters of a low social standing who do not " +
+                                    "behave appropriately will face punishment. ";
                             break;
                     }
                     break;
                 case 6:
-                    switch(dieRoll){
+                    switch(CultureOnesRoll){
                         case 1:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Trade – the culture has an odd attitude " +
+                                    "towards some aspect of commerce, which may interfere with " +
+                                    "trade at the spaceport. For example, merchants might expect " +
+                                    "a gift as part of a deal, or some goods may only be handled by " +
+                                    "certain families. ";
                             break;
                         case 2:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Nobility – those of high social standing " +
+                                    "have a strange custom associated with them; perhaps nobles " +
+                                    "are blinded, or must live in gilded cages, or only serve for a " +
+                                    "single year before being exiled. ";
                             break;
                         case 3:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Sex – the culture has an unusual attitude " +
+                                    "towards intercourse and reproduction. Perhaps cloning is used " +
+                                    "instead, or sex is used to seal commercial deals. ";
                             break;
                         case 4:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Eating – food and drink occupies an " +
+                                    "unusual place in the culture. Perhaps eating is a private affair, " +
+                                    "or banquets and formal dinners are seen as the highest form " +
+                                    "of politeness. ";
                             break;
                         case 5:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Customs: Travel – travellers may be distrusted or " +
+                                    "feted, or perhaps the culture frowns on those who leave their " +
+                                    "homes. ";
                             break;
                         case 6:
-                            planetoid.Description += " ";
+                            planetoid.Description += "Unusual Custom: Conspiracy – something strange is going " +
+                                    "on. The government is being subverted by another group or " +
+                                    "agency. ";
                             break;
                     }
                     break;
