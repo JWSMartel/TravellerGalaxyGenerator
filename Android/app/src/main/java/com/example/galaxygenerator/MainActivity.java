@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Galaxy Clicked!");
-                output.setText(makeGalaxy());
+                String galaxy = makeGalaxy();
+                output.setText(galaxy);
+                Log.d(TAG, galaxy);
             }
         });
         Button clearBtn = findViewById(R.id.ClearBtn);
