@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Galaxy Creator";
     private TextView output;
@@ -26,6 +28,22 @@ public class MainActivity extends AppCompatActivity {
                 Planetoid newPlanet = new Planetoid();
                 Log.d(TAG, "Make Planet clicked!");
                 output.setText(newPlanet.printOut);
+            }
+        });
+        Button makeGalaxyBtn = findViewById(R.id.makeGalaxy);
+        makeGalaxyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Galaxy Clicked!");
+                output.setText(makeGalaxy());
+            }
+        });
+        Button clearBtn = findViewById(R.id.ClearBtn);
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Clear Clicked!");
+                output.setText("");
             }
         });
     }
@@ -71,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         private String Starport;
         private int Tech;
         private String Bases;
-        private String TravelCodes;
+        private String TradeCodes;
         private String SurvivalGearReq;
         private int SizeRoll;
         private int AtmoRoll;
@@ -94,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             createPlanetLaw();
             createPlanetTech();
             Name += Bases;
-            //checkTradeCodes(this);
+            checkTradeCodes();
             Log.d(TAG, Name);
             printOut = NAME+Name+STARPORTQUALITY+Starport+SIZE+Size+ATMOTYPE+Atmo+TEMP+
                     Temp+HYDROPER+Hydro+POP+Pop+GOVTYPE+Govt+LAW+LawRoll+TECHLV+Tech+Description;
@@ -121,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void rollForBases( ){
-            Bases = "     ";
+            Bases = "   ";
             switch (Starport){
                 case "A":
                     if(checkRollStd(8)){
@@ -791,8 +809,7 @@ public class MainActivity extends AppCompatActivity {
                             "or a revolutionary council They tend not to appreciate weapons around them ";
                     break;
                 default:
-                    Govt = "Religious Dictatorship";
-                    Description += "Ruling functions are " +
+                    Description += "Religious Dictatorship : Ruling functions are " +
                             "performed by a religious organisation without regard to the specific " +
                             "individual needs ot the citizenry Examples include cults, transcendent" +
                             " philosophy, or psionic group minds Who is to say what they do or do " +
@@ -1131,5 +1148,119 @@ public class MainActivity extends AppCompatActivity {
                 Name += "-"+Tech;
             }
         }
+
+        private void checkTradeCodes( ){
+            Name += "  ";
+            if((AtmoRoll>=4&&AtmoRoll<=9)&&(HydroRoll>=4&&HydroRoll<=8)&&(PopRoll>=5&&PopRoll<=7)){
+                Name += "Ag";
+                Description += "\n\nAgricultural worlds are dedicated " +
+                        "to farming and food production. " +
+                        "Often, they are divided into vast " +
+                        "semi-feudal estates. ";
+            }
+            if(SizeRoll == 0 && AtmoRoll == 0 && HydroRoll == 0){
+                Name += "As";
+                Description += "\n\nAsteroids are usually mining " +
+                        "colonies, but can also be orbital " +
+                        "factories or colonies. ";
+            }
+            if(PopRoll == 0 && GovRoll == 0 && LawRoll == 0){
+                Name += "Ba";
+                Description += "\n\nBarren worlds are uncolonised and empty. ";
+            }
+            if(AtmoRoll>=2&&HydroRoll==0){
+                Name += "De";
+                Description += "\n\nDesert worlds are dry and barely habitable. ";
+            }
+            if(AtmoRoll>=10&&HydroRoll>=1){
+                Name += "Fl";
+                Description += "\n\nFluid Oceans are worlds where the surface liquid is something " +
+                        "other than water, and so are incompatible with Earth-derived life. ";
+            }
+            if(SizeRoll>=5&&(AtmoRoll>=4&&AtmoRoll<=9)&&(HydroRoll>=4&&HydroRoll<=8)){
+                Name += "Ga";
+                Description += "Garden worlds are Earth-like.\n\n";
+            }
+            if(PopRoll>=9){
+                Name += "Hi";
+                Description += "\n\nHigh Population worlds have a population in the billions. ";
+            }
+            if(Tech>=12){
+                Name += "Ht";
+                Description += "\n\nHigh Technology worlds are among the most technologically " +
+                        "advanced in the Imperium. ";
+            }
+            if(AtmoRoll<2&&HydroRoll>=1){
+                Name += "IC";
+                Description += "\n\nIce-Capped worlds have most of their surface liquid frozen in polar " +
+                        "ice caps, and are cold and dry. ";
+            }
+            if((AtmoRoll<3||AtmoRoll==4||AtmoRoll==7||AtmoRoll==9)&&PopRoll>=9){
+                Name += "In";
+                Description += "\n\nIndustrial worlds are dominated by factories and cities. ";
+            }
+            if(PopRoll>0&&PopRoll<4){
+                Name += "Lo";
+                Description += "\n\nLow Population worlds have a population of only a few " +
+                        "thousand or less. ";
+            }
+            if(Tech<=5){
+                Name += "Lt";
+                Description += "\n\nLow Technology worlds are preindustrial and cannot produce " +
+                        "advanced goods.";
+            }
+            if(AtmoRoll<4&&HydroRoll<4&&PopRoll>=6){
+                Name += "Na";
+                Description += "\n\nNon-Agricultural worlds are too dry or barren to support their " +
+                        "populations using conventional food production. ";
+            }
+            if(PopRoll>=4&&PopRoll<=6){
+                Name += "NI";
+                Description += "\n\nNon-Industrial worlds are too low-population to maintain an " +
+                        "industrial base. ";
+            }
+            if((AtmoRoll>=2&&AtmoRoll<=5)&&HydroRoll<4){
+                Name += "Po";
+                Description += "\n\nPoor worlds lack resources, viable land or sufficient population to " +
+                        "be anything other than marginal colonies. ";
+            }
+            if((AtmoRoll==6||AtmoRoll==8)&&(PopRoll>5&&PopRoll<9)){
+                Name += "RI";
+                Description += "\n\nRich worlds are blessed with a stable government and " +
+                        "viable biosphere, making them economic powerhouses. ";
+            }
+            if(AtmoRoll==0){
+                Name += "Va";
+                Description += "\n\nVacuum worlds have no atmosphere. ";
+            }
+            if(HydroRoll == 10){
+                Name += "Wa";
+                Description += "\n\nWater Worlds are nearly entirely water-ocean. ";
+            }
+        }
+    }
+
+    public String makeGalaxy(){
+        int columns = 8;
+        int rows = 10;
+        int hexes = columns*rows;
+        String output = "";
+        String hexPoint;
+        for(int c = 1;c<=columns;c++){
+            for(int r = 1;r<=rows;r++){
+                if(rollDie(1,0) == 1){
+                    //Something
+                    if(r<10){
+                        hexPoint = "0"+c+"0"+r;
+                    }else{
+                        hexPoint = "0"+c+""+r;
+                    }
+                    //Make planet
+                    Planetoid newPlanet = new Planetoid();
+                    output += hexPoint + "    " + newPlanet.Name +"\n";
+                }
+            }
+        }
+        return output;
     }
 }
